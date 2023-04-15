@@ -31,6 +31,9 @@ find_package(GUROBI REQUIRED)
 
 include_directories(${GUROBI_INCLUDE_DIRS})
 
+
+include_directories(libs/lemon-main-a278d16bd2d0)
+
 # list source files here
 set(sources main.cpp)
 
@@ -42,7 +45,10 @@ if(CXX)
                         debug ${GUROBI_CXX_DEBUG_LIBRARY})
 endif()
 
+# add_library(LEMON STATIC libs/lemon-main-a278d16bd2d0)
+
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GUROBI_LIBRARY})
+target_link_libraries(${CMAKE_PROJECT_NAME} LEMON)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   include(FeatureSummary)

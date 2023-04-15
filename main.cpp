@@ -4,56 +4,36 @@
 #include <iostream>
 
 #include "gurobi_c++.h"
+#include "src/relaxed_solver_surviv_net.h"
+
+#include <vector>
 
 
-using namespace std;
-
-int main(int argc, char* argv[])
+int test()
 {
-    try {
+    std::vector<int> source2sink = { 2, 3 };
+    std::vector<Vertex> vertices = {
+        Vertex(0.0f, 0.0f),
+        Vertex(1.0f, 0.0f),
+        Vertex(1.0f, 1.0f),
+        Vertex(0.0f, 1.0f),
+    };
 
-        // Create an environment
-        GRBEnv env = GRBEnv(true);
-        env.set("LogFile", "mip1.log");
-        env.start();
+    GRBEnv env = new GRBEnv(true);
+    env.set("LogFile", "mip1.log");
+    env.start();
 
-        // Create an empty model
-        GRBModel model = GRBModel(env);
+    // Create an empty model
+    GRBModel model = GRBModel(env);
 
-        // Create variables
-        GRBVar x = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, "x");
-        GRBVar y = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, "y");
-        GRBVar z = model.addVar(0.0, 1.0, 0.0, GRB_BINARY, "z");
+    RelaxedSurvivableNetworkSolver solver(model, 4, source2sink, vertices);
 
-        // Set objective: maximize x + y + 2 z
-        model.setObjective(x + y + 2 * z, GRB_MAXIMIZE);
+    solver.solve(model);
 
-        // Add constraint: x + 2 y + 3 z <= 4
-        model.addConstr(x + 2 * y + 3 * z <= 4, "c0");
+    return 0;
+}
 
-        // Add constraint: x + y >= 1
-        model.addConstr(x + y >= 1, "c1");
-
-        // Optimize model
-        model.optimize();
-
-        cout << x.get(GRB_StringAttr_VarName) << " "
-            << x.get(GRB_DoubleAttr_X) << endl;
-        cout << y.get(GRB_StringAttr_VarName) << " "
-            << y.get(GRB_DoubleAttr_X) << endl;
-        cout << z.get(GRB_StringAttr_VarName) << " "
-            << z.get(GRB_DoubleAttr_X) << endl;
-
-        cout << "Obj: " << model.get(GRB_DoubleAttr_ObjVal) << endl;
-
-    }
-    catch (GRBException e) {
-        cout << "Error code = " << e.getErrorCode() << endl;
-        cout << e.getMessage() << endl;
-    }
-    catch (...) {
-        cout << "Exception during optimization" << endl;
-    }
-
+int main(int argc, char* argv[]) {
+    test();
     return 0;
 }
