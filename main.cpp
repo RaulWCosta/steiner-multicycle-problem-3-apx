@@ -8,6 +8,7 @@
 
 #include <vector>
 
+#include <lemon/list_graph.h>
 
 int test()
 {
