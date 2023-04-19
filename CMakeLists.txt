@@ -31,11 +31,6 @@ find_package(GUROBI REQUIRED)
 
 include_directories(${GUROBI_INCLUDE_DIRS})
 
-
-
-
-# include_directories(libs/lemon-main-a278d16bd2d0 libs/lemon-main-a278d16bd2d0/build)
-
 # list source files here
 set(sources main.cpp libs/lemon-main-a278d16bd2d0/lemon/bits/lwindows.cc)
 
@@ -43,7 +38,6 @@ add_executable(${CMAKE_PROJECT_NAME} ${sources})
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/lemon-main-a278d16bd2d0/)
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/lemon-main-a278d16bd2d0/build/)
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/lemon-main-a278d16bd2d0/lemon/bits/)
 
 if(CXX)
   set(CMAKE_CXX_STANDARD 11)
@@ -51,17 +45,7 @@ if(CXX)
                         debug ${GUROBI_CXX_DEBUG_LIBRARY})
 endif()
 
-
-# add_library(LEMON MODULE libs/lemon-main-a278d16bd2d0/lemon/)
-
-# set_target_properties(LEMON PROPERTIES LINKER_LANGUAGE CXX)
-
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GUROBI_LIBRARY})
-
-# target_link_libraries(${CMAKE_PROJECT_NAME} LEMON)
-
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --without-glpk --without-cplex --without-soplex")
-
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
   include(FeatureSummary)
