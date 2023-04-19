@@ -23,7 +23,7 @@
 #if defined(LEMON_USE_PTHREAD)
 #include <pthread.h>
 #elif defined(LEMON_USE_WIN32_THREADS)
-#include <lemon/bits/windows.h>
+#include <lemon/bits/lwindows.h>
 #endif
 
 namespace lemon {

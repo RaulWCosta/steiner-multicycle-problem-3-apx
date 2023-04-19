@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\arg_parser.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\base.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\color.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\lp_base.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\lp_skeleton.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\random.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\bits\windows.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\lemon\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D69061D5-8BC9-37F2-923A-6F82D4F4F1E0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef LEMON_MATH_H
-#define LEMON_MATH_H
+#ifndef LEMON_LMATH_H
+#define LEMON_LMATH_H
 
 ///\ingroup misc
 ///\file

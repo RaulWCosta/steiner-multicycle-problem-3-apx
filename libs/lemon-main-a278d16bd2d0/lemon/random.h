@@ -70,7 +70,7 @@
 #include <limits>
 #include <fstream>
 
-#include <lemon/math.h>
+#include <lemon/lmath.h>
 #include <lemon/dim2.h>
 
 #ifndef LEMON_WIN32
@@ -79,7 +79,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #else
-#include <lemon/bits/windows.h>
+#include <lemon/bits/lwindows.h>
 #endif
 
 ///\ingroup misc

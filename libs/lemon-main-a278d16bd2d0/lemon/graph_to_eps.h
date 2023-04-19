@@ -26,13 +26,13 @@
 #include<vector>
 
 #ifndef LEMON_WIN32
-#include<sys/time.h>
+// #include<sys/time.h>
 #include<ctime>
 #else
-#include<lemon/bits/windows.h>
+#include<lemon/bits/lwindows.h>
 #endif
 
-#include<lemon/math.h>
+#include<lemon/lmath.h>
 #include<lemon/core.h>
 #include<lemon/dim2.h>
 #include<lemon/maps.h>

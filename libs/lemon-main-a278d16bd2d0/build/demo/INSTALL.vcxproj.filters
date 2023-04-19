@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\acbafae90ffad60bbd40974cbf493864\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{AA6C7912-65FC-3950-BC8A-11ACCCA87E4A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

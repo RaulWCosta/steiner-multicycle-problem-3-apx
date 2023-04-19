@@ -26,7 +26,7 @@
 #include <lemon/config.h>
 
 #ifdef LEMON_WIN32
-#include <lemon/bits/windows.h>
+#include <lemon/bits/lwindows.h>
 #else
 #include <unistd.h>
 #include <sys/times.h>
@@ -36,7 +36,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <lemon/math.h>
+#include <lemon/lmath.h>
 
 namespace lemon {
 

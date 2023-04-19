@@ -19,7 +19,7 @@
 ///\file
 ///\brief Some basic non-inline functions and static global data.
 
-#include<lemon/bits/windows.h>
+#include<lemon/bits/lwindows.h>
 
 #if defined(LEMON_WIN32) && defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wold-style-cast"

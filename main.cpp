@@ -8,7 +8,13 @@
 
 #include <vector>
 
-#include <lemon/list_graph.h>
+// #include <lemon/list_graph.h>
+
+
+#include <lemon/lmath.h>
+
+#include<lemon/graph_to_eps.h>
+#include<lemon/list_graph.h>
 
 int test()
 {
@@ -35,6 +41,18 @@ int test()
 }
 
 int main(int argc, char* argv[]) {
-    test();
+    // test();
+  lemon::ListGraph g;
+  typedef lemon::ListGraph::Node Node;
+  typedef lemon::ListGraph::NodeIt NodeIt;
+  typedef lemon::ListGraph::Edge Edge;
+  typedef lemon::dim2::Point<int> Point;
+  
+  Node n1=g.addNode();
+  Node n2=g.addNode();
+  Node n3=g.addNode();
+  Node n4=g.addNode();
+  Node n5=g.addNode();
+  std::cout <<"foio";
     return 0;
 }

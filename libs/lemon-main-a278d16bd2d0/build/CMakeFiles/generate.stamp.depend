@@ -1,0 +1,53 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CPack.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CPackComponent.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckCXXCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckIncludeFile.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/CheckTypeSize.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindCygwin.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindDoxygen.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindMsys.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindPythonInterp.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/FindWget.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Internal/CheckCompilerFlag.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Internal/CheckFlagCommonConfig.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-3.26/Templates/CPackConfig.cmake.in
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/3.26.2/CMakeCCompiler.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/3.26.2/CMakeCXXCompiler.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/3.26.2/CMakeRCCompiler.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/3.26.2/CMakeSystem.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/FindCOIN.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/FindGLPK.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/FindGhostscript.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/FindILOG.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/FindSOPLEX.cmake
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/LEMONConfig.cmake.in
+C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/cmake/version.cmake.in

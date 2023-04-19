@@ -1,0 +1,458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Maintainer|x64">
+      <Configuration>Maintainer</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{20E644AE-6E81-3BCE-BA6D-85CBC6C245B0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>check</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\f07bfbfee157dd80e84d73dfe3ebcd73\check.rule">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\ctest.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\ctest.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\ctest.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\ctest.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</VerifyInputsAndOutputsExist>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'"></Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">setlocal
+"C:\Program Files\CMake\bin\ctest.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">false</LinkObjects>
+      <VerifyInputsAndOutputsExist Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">false</VerifyInputsAndOutputsExist>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0 -BC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build --check-stamp-file C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindCygwin.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindMsys.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPythonInterp.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindWget.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.26\Templates\CPackConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCXXCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeRCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeSystem.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindCOIN.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGLPK.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGhostscript.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindILOG.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindSOPLEX.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\LEMONConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\version.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0 -BC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build --check-stamp-file C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindCygwin.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindMsys.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPythonInterp.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindWget.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.26\Templates\CPackConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCXXCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeRCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeSystem.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindCOIN.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGLPK.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGhostscript.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindILOG.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindSOPLEX.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\LEMONConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\version.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0 -BC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build --check-stamp-file C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindCygwin.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindMsys.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPythonInterp.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindWget.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.26\Templates\CPackConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCXXCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeRCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeSystem.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindCOIN.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGLPK.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGhostscript.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindILOG.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindSOPLEX.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\LEMONConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\version.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0 -BC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build --check-stamp-file C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindCygwin.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindMsys.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPythonInterp.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindWget.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.26\Templates\CPackConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCXXCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeRCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeSystem.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindCOIN.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGLPK.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGhostscript.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindILOG.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindSOPLEX.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\LEMONConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\version.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">Building Custom Rule C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0 -BC:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build --check-stamp-file C:/Users/raulcosta/Documents/projetos/steiner-multicycle-problem-3-apx/libs/lemon-main-a278d16bd2d0/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCheckCompilerFlagCommonPatterns.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindCygwin.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindMsys.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindPythonInterp.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\FindWget.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckCompilerFlag.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckFlagCommonConfig.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.26\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.26\Templates\CPackConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeCXXCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeRCCompiler.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\3.26.2\CMakeSystem.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindCOIN.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGLPK.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindGhostscript.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindILOG.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\FindSOPLEX.cmake;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\LEMONConfig.cmake.in;C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\cmake\version.cmake.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Maintainer|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\CMakeFiles\check">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\ZERO_CHECK.vcxproj">
+      <Project>{6DEBF7C8-A2EF-33B9-9957-963D15BC187A}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\adaptors_test.vcxproj">
+      <Project>{6F202C3A-6E33-3BF0-A7D0-DB323855DFEA}</Project>
+      <Name>adaptors_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\arc_look_up_test.vcxproj">
+      <Project>{A3233000-2238-3B0F-A5BA-62415CE739FA}</Project>
+      <Name>arc_look_up_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\bellman_ford_test.vcxproj">
+      <Project>{4E578A5F-1E84-3FDF-9D8F-B641BE3E78AE}</Project>
+      <Name>bellman_ford_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\bfs_test.vcxproj">
+      <Project>{AEDA3C69-15D5-39B5-AFD2-4185CF1FFA2D}</Project>
+      <Name>bfs_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\bpgraph_test.vcxproj">
+      <Project>{F3D3005B-7879-315E-91F4-1E17547DB9FE}</Project>
+      <Name>bpgraph_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\circulation_test.vcxproj">
+      <Project>{6CCB7C0E-39AF-3B79-93D2-F5702ECA74F3}</Project>
+      <Name>circulation_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\connectivity_test.vcxproj">
+      <Project>{E8F64F7D-7476-3DFA-AD72-A3769146635A}</Project>
+      <Name>connectivity_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\counter_test.vcxproj">
+      <Project>{CCA1C74B-E2FF-3F0A-9F2D-E70F704D8FF2}</Project>
+      <Name>counter_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\dfs_test.vcxproj">
+      <Project>{5C7B95AF-BD7D-30F6-BD70-C2DC63E6A990}</Project>
+      <Name>dfs_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\digraph_test.vcxproj">
+      <Project>{04E84D82-FD53-36D2-B55B-B9842B72BFE8}</Project>
+      <Name>digraph_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\dijkstra_test.vcxproj">
+      <Project>{58C5D16D-93EB-3B5F-ABC9-5D948ECB76AE}</Project>
+      <Name>dijkstra_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\dim_test.vcxproj">
+      <Project>{8DCE036D-F837-370D-A85B-55D16B236DB8}</Project>
+      <Name>dim_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\edge_set_test.vcxproj">
+      <Project>{DEA41A49-2A50-39F3-B7D3-29EF62CA0492}</Project>
+      <Name>edge_set_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\error_test.vcxproj">
+      <Project>{D7435F0A-F029-3A13-A10B-CC938CF32B75}</Project>
+      <Name>error_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\euler_test.vcxproj">
+      <Project>{F0EE1A7A-317F-3836-A75B-9C34429ED65E}</Project>
+      <Name>euler_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\fractional_matching_test.vcxproj">
+      <Project>{BB066B11-E565-39A0-81F4-86128A7E2852}</Project>
+      <Name>fractional_matching_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\gomory_hu_test.vcxproj">
+      <Project>{368ED9D4-9EA7-3B28-B6A2-7E0D2285D53C}</Project>
+      <Name>gomory_hu_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\graph_copy_test.vcxproj">
+      <Project>{DE373BDB-037B-3C76-AD84-F501734AEEA6}</Project>
+      <Name>graph_copy_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\graph_test.vcxproj">
+      <Project>{BDEF6A37-4F88-381F-A227-D1F38F0E4DE1}</Project>
+      <Name>graph_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\graph_utils_test.vcxproj">
+      <Project>{E0A6042E-D541-31B5-8D21-75C86A306725}</Project>
+      <Name>graph_utils_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\hao_orlin_test.vcxproj">
+      <Project>{DD2C5932-5C8F-3A84-961B-9043D336EA35}</Project>
+      <Name>hao_orlin_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\heap_test.vcxproj">
+      <Project>{AEF838A6-8A7D-3F9F-8B96-04653D2FE27E}</Project>
+      <Name>heap_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\kruskal_test.vcxproj">
+      <Project>{32DCB54F-A944-3897-B5C2-B86DCB0A2645}</Project>
+      <Name>kruskal_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\lgf_reader_writer_test.vcxproj">
+      <Project>{0BDA371C-A65A-3131-92AB-B228FE58522C}</Project>
+      <Name>lgf_reader_writer_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\lgf_test.vcxproj">
+      <Project>{FF7BCC72-1607-3690-AED7-5E218C73E241}</Project>
+      <Name>lgf_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\maps_test.vcxproj">
+      <Project>{7EEC0B4A-D3F6-3466-8B04-D2262286197E}</Project>
+      <Name>maps_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\matching_test.vcxproj">
+      <Project>{366F60B9-6C08-3C57-B8E9-69D5E7B1C32E}</Project>
+      <Name>matching_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\max_cardinality_search_test.vcxproj">
+      <Project>{F41EF488-ED16-3964-805C-688CB1C024DA}</Project>
+      <Name>max_cardinality_search_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\max_clique_test.vcxproj">
+      <Project>{7714219E-1C94-3D12-9C55-BEE05A65587B}</Project>
+      <Name>max_clique_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\max_flow_test.vcxproj">
+      <Project>{8DEEB4D3-7C35-34BC-B43E-324DBFC9A8C2}</Project>
+      <Name>max_flow_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\min_cost_arborescence_test.vcxproj">
+      <Project>{835FF5F2-64CB-3B07-8C70-810B6876C563}</Project>
+      <Name>min_cost_arborescence_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\min_cost_flow_test.vcxproj">
+      <Project>{46224D2E-C699-3E7D-AED6-EAAA41CAC503}</Project>
+      <Name>min_cost_flow_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\min_mean_cycle_test.vcxproj">
+      <Project>{F2FD22BD-0D0D-3893-9158-BF2984FFFB65}</Project>
+      <Name>min_mean_cycle_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\nagamochi_ibaraki_test.vcxproj">
+      <Project>{E9E1B3EB-2510-3D41-B5A2-3883016E16E4}</Project>
+      <Name>nagamochi_ibaraki_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\path_test.vcxproj">
+      <Project>{8379C128-E9C0-39DD-970F-6327486F4D55}</Project>
+      <Name>path_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\planarity_test.vcxproj">
+      <Project>{7AE427E8-E883-3033-9F41-19501BFADB0E}</Project>
+      <Name>planarity_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\radix_sort_test.vcxproj">
+      <Project>{7514FC6F-0236-3F80-BCA2-92343DE3001D}</Project>
+      <Name>radix_sort_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\random_test.vcxproj">
+      <Project>{0FFE2ECE-A7EF-3408-BD44-54199E8B1EDC}</Project>
+      <Name>random_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\suurballe_test.vcxproj">
+      <Project>{2B7C30CE-2114-3CF1-B3B8-6FF5B646DC2E}</Project>
+      <Name>suurballe_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\time_measure_test.vcxproj">
+      <Project>{21773270-2F89-362B-B878-01818F4EA3F2}</Project>
+      <Name>time_measure_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\tsp_test.vcxproj">
+      <Project>{148E53B1-318A-3A22-BD4B-73C682097D00}</Project>
+      <Name>tsp_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\unionfind_test.vcxproj">
+      <Project>{722873C7-EC02-3BAE-81A2-AFD649B3D096}</Project>
+      <Name>unionfind_test</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\raulcosta\Documents\projetos\steiner-multicycle-problem-3-apx\libs\lemon-main-a278d16bd2d0\build\test\vf2_test.vcxproj">
+      <Project>{C1824F28-CA02-3A23-8380-F2EE529C395E}</Project>
+      <Name>vf2_test</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

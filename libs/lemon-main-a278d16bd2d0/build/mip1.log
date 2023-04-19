@@ -1,0 +1,56 @@
+
+Gurobi 10.0.1 (win64, C++) logging started Sat Apr 15 22:26:23 2023
+
+Set parameter Username
+Set parameter LogFile to value "mip1.log"
+Academic license - for non-commercial use only - expires 2024-03-25
+Set parameter LazyConstraints to value 1
+Gurobi Optimizer version 10.0.1 build v10.0.1rc0 (win64)
+
+CPU model: 11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+
+Optimize a model with 4 rows, 10 columns and 16 nonzeros
+Model fingerprint: 0x801c518f
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e+00, 2e+00]
+Presolve time: 0.00s
+Presolved: 4 rows, 6 columns, 12 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.000000e+00   0.000000e+00      0s
+       5    4.0000000e+00   0.000000e+00   0.000000e+00      0s
+
+Solved in 5 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  4.000000000e+00
+
+Gurobi 10.0.1 (win64, C++) logging started Sat Apr 15 22:26:51 2023
+
+Set parameter Username
+Set parameter LogFile to value "mip1.log"
+Academic license - for non-commercial use only - expires 2024-03-25
+Set parameter LazyConstraints to value 1
+Gurobi Optimizer version 10.0.1 build v10.0.1rc0 (win64)
+
+CPU model: 11th Gen Intel(R) Core(TM) i5-11400H @ 2.70GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 6 physical cores, 12 logical processors, using up to 12 threads
+
+Optimize a model with 4 rows, 10 columns and 16 nonzeros
+Model fingerprint: 0x801c518f
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e+00, 2e+00]
+Presolve time: 0.00s
+Presolved: 4 rows, 6 columns, 12 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    0.0000000e+00   8.000000e+00   0.000000e+00      0s
+       5    4.0000000e+00   0.000000e+00   0.000000e+00      0s
+
+Solved in 5 iterations and 0.00 seconds (0.00 work units)
+Optimal objective  4.000000000e+00
