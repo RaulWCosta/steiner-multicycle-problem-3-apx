@@ -32,7 +32,7 @@ find_package(GUROBI REQUIRED)
 include_directories(${GUROBI_INCLUDE_DIRS})
 
 # list source files here
-set(sources main.cpp libs/lemon-main-a278d16bd2d0/lemon/bits/lwindows.cc libs/lemon-main-a278d16bd2d0/lemon/base.cc)
+set(sources main.cpp libs/lemon-main-a278d16bd2d0/lemon/bits/lwindows.cc libs/lemon-main-a278d16bd2d0/lemon/base.cc src/new_2apx.h)
 
 add_executable(${CMAKE_PROJECT_NAME} ${sources})
 

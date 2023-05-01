@@ -9,6 +9,14 @@
 #include <string.h>
 
 #include <lemon/full_graph.h>
+#include <lemon/edmonds_karp.h>
+#include <lemon/lmath.h>
+#include <lemon/core.h>
+#include <lemon/graph_to_eps.h>
+#include <lemon/concepts/graph_components.h>
+// #include <lemon/preflow.h>
+
+using namespace std;
 
 class Flow
 {
@@ -99,39 +107,42 @@ public:
 class connectivity_constrain : public GRBCallback
 {
 public:
-    GRBVar **_edges_vars;
-    double **_current_solution;
+    GRBVar **_edges_vars = nullptr;
+    // double **_current_solution;
     int _n;
     std::vector<int> _source_to_sink;
-    Flow *_flow;
-    lemon::FullGraph *_graph;
+    // Flow *_flow;
+    lemon::FullDigraph *_graph;
+    lemon::FullDigraph::ArcMap<float>* _cap;
 
     connectivity_constrain(GRBVar **edges_vars, int n, const std::vector<int> &source_to_sink,
-                           lemon::FullGraph *graph, )
+                           lemon::FullDigraph *graph )
         : _edges_vars(edges_vars), _n(n), _source_to_sink(source_to_sink), _graph(graph)
     {
-        _current_solution = new double *[_n];
-        for (int i = 0; i < _n; i++)
-            _current_solution[i] = new double[_n];
+        _cap = new lemon::FullDigraph::ArcMap<float>(*_graph);
+        // _current_solution = new double *[_n];
+        // for (int i = 0; i < _n; i++)
+        //     _current_solution[i] = new double[_n];
 
-        _flow = &Flow(_n);
+        // _flow = &Flow(_n);
     }
 
 protected:
     double **update_current_solution()
     {
+        double** current_solution = new double *[_n];
         for (int i = 0; i < _n; i++)
-            _current_solution[i] = getSolution(_edges_vars[i], _n);
+            current_solution[i] = getSolution(_edges_vars[i], _n);
 
         for (int i = 0; i < _n; i++)
         {
             for (int j = 0; j <= i; j++)
             {
-                _current_solution[i][j] = (_current_solution[i][j] >= 0.5) ? 1.0 : _current_solution[i][j];
+                current_solution[i][j] = (current_solution[i][j] >= 0.5) ? 1.0 : current_solution[i][j];
             }
         }
 
-        return _current_solution;
+        return current_solution;
     }
 
     void add_restrictions(const int *path)
@@ -140,19 +151,45 @@ protected:
 
     void callback()
     {
-        double **current_solution = update_current_solution();
-        int *path;
+        try {
+            double **current_solution = update_current_solution();
 
-        for (int i = 0; i < _source_to_sink.size(); i++)
-        {
-            if (!_flow->fordFulkerson(i, _source_to_sink[i], current_solution, path))
-            {
-                // flow is not greater or equal to 2
-                // needs adicional restrictions
-                add_restrictions(path);
-            }
+            // // update cap based on current solution
+            // for (int i = 0; i < _n; i++) {
+            //     for (int j = 0; j < _n; j++) {
+            //         lemon::FullDigraph::Node u = (*_graph)(i);
+            //         lemon::FullDigraph::Node v = (*_graph)(j);
+            //         (*_cap)[_graph->arc(u, v)] = (float)current_solution[i][j];
+            //     }
+            // }
+
+            // for (int i = 0; i < _source_to_sink.size(); i++) {
+            //     lemon::FullDigraph::Node s = (*_graph)(i);
+            //     lemon::FullDigraph::Node t = (*_graph)(_source_to_sink[i]);
+            //     lemon::EdmondsKarp<lemon::FullDigraph, lemon::FullDigraph::ArcMap<float>> preflow(*_graph, *_cap, s, t);
+            //     preflow.run();
+            //     float solution = preflow.flowValue();
+            // }
+        }
+        catch (GRBException e) {
+            std::cout << "Error number: " << e.getErrorCode() << std::endl;
+            std::cout << e.getMessage() << std::endl;
+        }
+        catch (...) {
+            std::cout << "Error during callback" << std::endl;
         }
     }
+
+
+    // float max_flow(double **current_solution, int source, int sink) {
+
+
+
+
+    //     lemon::EdmondsKarp<lemon::FullGraph> ek = lemon::EdmondsKarp(*_graph, _cap, source, sink);
+    //     ek.run();
+    //     return ek.flowValue();
+    // }
 
     // void callback() {
     //     try {
@@ -190,89 +227,108 @@ class RelaxedSurvivableNetworkSolver
 {
 
 public:
-    GRBVar **_edges_vars = nullptr;
-    GRBLinExpr *_degree_vars = nullptr;
+    
+    GRBLinExpr *_in_degree_vars = nullptr;
+    GRBLinExpr *_out_degree_vars = nullptr;
     // lemon::FullGraph *_graph;
     int _n;
 
     RelaxedSurvivableNetworkSolver(
-        GRBModel &model, int n, const std::vector<int> &source_to_sink,
-        lemon::FullGraph *graph, lemon::FullGraph::EdgeMap<float> *cost)
+        int n, const std::vector<int> &source_to_sink,
+        lemon::FullDigraph *graph, lemon::FullDigraph::ArcMap<float> *cost)
     {
         _n = n;
         // _graph = graph;
+        GRBEnv* env = NULL;
+        GRBVar** edges_vars = NULL;
 
-        _edges_vars = new GRBVar *[n];
+        edges_vars = new GRBVar *[n];
         for (int i = 0; i < n; i++)
-            _edges_vars[i] = new GRBVar[n];
+            edges_vars[i] = new GRBVar[n];
 
-        _degree_vars = new GRBLinExpr[n];
+        try {
 
-        model.set(GRB_IntParam_LazyConstraints, 1);
+            env = new GRBEnv();
+            GRBModel model = GRBModel(*env);
 
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = i + 1; j < n; j++)
+            model.set(GRB_IntParam_LazyConstraints, 1);
+
+            for (int i = 0; i < n; i++)
             {
-                lemon::FullGraphBase::Node u = (*graph)(i);
-                lemon::FullGraphBase::Node v = (*graph)(j);
-                float dist = (*cost)[graph->edge(u, v)];
-                _edges_vars[i][j] = model.addVar(0.0, 2.0, dist, GRB_CONTINUOUS, "edge_" + std::to_string(i) + "_" + std::to_string(j));
-                // _edges_vars[j][i] = _edges_vars[i][j];
+                for (int j = i + 1; j < n; j++)
+                {
+                    lemon::FullDigraph::Node u = (*graph)(i);
+                    lemon::FullDigraph::Node v = (*graph)(j);
+                    float dist = (*cost)[graph->arc(u, v)];
+                    edges_vars[i][j] = model.addVar(0.0, 1.0, dist, GRB_CONTINUOUS, "edge_" + std::to_string(i) + "_" + std::to_string(j));
+                    edges_vars[j][i] = model.addVar(0.0, 1.0, dist, GRB_CONTINUOUS, "edge_" + std::to_string(j) + "_" + std::to_string(i));
+                }
             }
-        }
 
-        // Forbid edge from node back to itself
-        for (int i = 0; i < n; i++)
-        {
-            _edges_vars[i][i].set(GRB_DoubleAttr_UB, 0);
-        }
+            // _in_degree_vars = new GRBLinExpr[n];
+            // _out_degree_vars = new GRBLinExpr[n];
 
-        // every vertex needs degree >= 2
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
+            // Forbid edge from node back to itself
+            for (int i = 0; i < n; i++)
             {
-                _degree_vars[i] += _edges_vars[i][j];
+                edges_vars[i][i].set(GRB_DoubleAttr_UB, 0);
             }
-            model.addConstr(_degree_vars[i] >= 2);
+
+            // every vertex needs degree >= 2
+            // for (int i = 0; i < n; i++)
+            // {
+            //     for (int j = 0; j < n; j++)
+            //     {
+            //         _out_degree_vars[i] += _edges_vars[i][j];
+            //         _in_degree_vars[i] += _edges_vars[j][i];
+            //     }
+            //     model.addConstr(_in_degree_vars[i] >= 2);
+            //     model.addConstr(_out_degree_vars[i] >= 2);
+            // }
+
+            connectivity_constrain cb = connectivity_constrain(edges_vars, n, source_to_sink,
+                                                            graph);
+            model.setCallback(&cb);
+
+            model.optimize();
+            // return;
+        } catch (GRBException e) {
+            cout << "Error number: " << e.getErrorCode() << endl;
+            cout << e.getMessage() << endl;
+        }
+        catch (...) {
+            cout << "Error during optimization" << endl;
         }
 
-        connectivity_constrain cb = connectivity_constrain(_edges_vars, n, source_to_sink,
-                                                           graph);
-        model.setCallback(&cb);
-
-        // model.optimize();
-        // return;
     }
 
     ~RelaxedSurvivableNetworkSolver()
     {
     }
 
-    void solve(GRBModel &model)
-    {
-        std::cout << "solve!" << std::endl;
-        model.optimize();
+    // void solve(GRBModel &model)
+    // {
+    //     std::cout << "solve!" << std::endl;
+    //     model.optimize();
 
-        double **sol = new double *[_n];
-        // for (int  i = 0; i  < _n; i++)
-        //     sol[i] = new double[_n];
+    //     double **sol = new double *[_n];
+    //     // for (int  i = 0; i  < _n; i++)
+    //     //     sol[i] = new double[_n];
 
-        for (int i = 0; i < _n; i++)
-        {
-            // for (int j = 0; j < n; j++) {
-            sol[i] = model.get(GRB_DoubleAttr_X, _edges_vars[i], _n);
-            // }
-            // model.addConstr(_degree_vars[i] >= 2);
-        }
+    //     for (int i = 0; i < _n; i++)
+    //     {
+    //         // for (int j = 0; j < n; j++) {
+    //         sol[i] = model.get(GRB_DoubleAttr_X, edges_vars[i], _n);
+    //         // }
+    //         // model.addConstr(_degree_vars[i] >= 2);
+    //     }
 
-        for (int i = 0; i < _n; i++)
-            for (int j = 0; j <= i; j++)
-            {
-                std::cout << "[" << std::to_string(i) << ", " << std::to_string(j);
-                std::cout << "] = " << sol[i][j] << std::endl;
-            }
-        // _edges_vars
-    }
+    //     for (int i = 0; i < _n; i++)
+    //         for (int j = 0; j <= i; j++)
+    //         {
+    //             std::cout << "[" << std::to_string(i) << ", " << std::to_string(j);
+    //             std::cout << "] = " << sol[i][j] << std::endl;
+    //         }
+    //     // _edges_vars
+    // }
 };
