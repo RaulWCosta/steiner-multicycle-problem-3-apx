@@ -79,7 +79,7 @@ namespace Exact {
                     double* tmp_solution;
                     for (int i = 0; i < _n; i++) {
                         tmp_solution = getSolution(_edge_vars[i], _n);
-                        for (int j = 0; j < _n; j++)
+                        for (int j = i + 1; j < _n; j++)
                             _curr_sol[i][j] = (int)tmp_solution[j];
                     }
 
@@ -176,8 +176,8 @@ namespace Exact {
 
             // Forbid edge from node back to itself
 
-            for (int i = 0; i < n; i++)
-                edge_vars[i][i].set(GRB_DoubleAttr_UB, 0);
+            // for (int i = 0; i < n; i++)
+            //     edge_vars[i][i].set(GRB_IntAttr_UB, 0);
 
             // set callback
             FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n, source2sink);

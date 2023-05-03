@@ -33,7 +33,7 @@ namespace SurvivableNetwork {
 
         }
 
-        double** solve_lp() {
+        double** solve() {
 
             bool valid_relaxed_solution = false;
             unordered_set<int> s_set;
@@ -301,7 +301,7 @@ namespace SurvivableNetwork {
         while(true) {
 
             // rodar LP até solução viável do relaxado
-            double** lp_solution = lp_solver.solve_lp();
+            double** lp_solution = lp_solver.solve();
 
             print_matrix(n, lp_solution);
             print_matrix(n, int_solution);
