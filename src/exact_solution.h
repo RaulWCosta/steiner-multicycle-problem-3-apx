@@ -11,7 +11,7 @@
 using namespace std;
 using namespace lemon;
 
-namespace Exact {
+namespace ExactSMCP {
 
     bool is_valid_int_solution(int n, int** current_solution, vector<int>& source2sink, vector<int>* stack) {
 

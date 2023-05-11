@@ -30,7 +30,6 @@ namespace SurvivableNetwork {
         {
             _graph = new FullDigraph(n);
             _cap = new FullDigraph::ArcMap<float>(*_graph);
-
         }
 
         double** solve() {
