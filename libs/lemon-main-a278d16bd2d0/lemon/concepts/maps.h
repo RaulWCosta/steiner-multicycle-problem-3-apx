@@ -136,7 +136,7 @@ namespace lemon {
 
       /// Returns the value associated with the given key.
       Value operator[](const Key &) const {
-        return *(reinterpret_cast<Value *>(sizeof(Value)));
+        return *(static_cast<Value *>(0)+1);
       }
 
       /// Sets the value associated with the given key.

@@ -3,7 +3,10 @@
 #include "gurobi_c++.h"
 
 #include <lemon/full_graph.h>
-#include <lemon/preflow.h>
+// #include <lemon/preflow.h>
+#include <lemon/gomory_hu.h>
+#include <lemon/concepts/maps.h>
+#include <lemon/list_graph.h>
 
 #include <unordered_set>
 
@@ -11,6 +14,9 @@
 
 using namespace std;
 using namespace lemon;
+
+typedef ListGraph Graph;
+typedef FullGraph::NodeMap<bool> NodeBoolMap;
 
 namespace SurvivableNetwork {
 
@@ -22,35 +28,35 @@ namespace SurvivableNetwork {
         GRBModel* _model;
         GRBVar** _edge_vars;
         vector<int> _source2sink;
-        FullDigraph* _graph = NULL;
-        FullDigraph::ArcMap<float>* _cap = NULL;
+        FullGraph* _graph = NULL;
+        FullGraph::EdgeMap<float>* _cap = NULL;
 
         LPSolver(int n, GRBModel* model, GRBVar** edge_vars, vector<int>& source2sink)
             : _n(n), _model(model), _edge_vars(edge_vars), _source2sink(source2sink)
         {
-            _graph = new FullDigraph(n);
-            _cap = new FullDigraph::ArcMap<float>(*_graph);
+            _graph = new FullGraph(n);
+            _cap = new FullGraph::EdgeMap<float>(*_graph);
         }
 
         double** solve() {
 
             bool valid_relaxed_solution = false;
-            unordered_set<int> s_set;
+
 
             while(true) {
 
                 // update _cap inplace
                 lp_solver_run();
 
+                NodeBoolMap cutmap(*_graph);
                 // run max flow or each terminal pair
-                valid_relaxed_solution = is_valid_relaxed_solution(&s_set);
+                valid_relaxed_solution = is_valid_relaxed_solution(&cutmap);
 
                 if (valid_relaxed_solution) {
                     break;
                 }
 
-                update_model_constrains(s_set);
-                s_set.clear();
+                update_model_constrains(cutmap);
 
             }
 
@@ -60,68 +66,62 @@ namespace SurvivableNetwork {
 
             for (int i = 0; i < _n; i++) {
                 for (int j = 0; j < _n; j++) {
-                    FullDigraph::Node u = (*_graph)(i);
-                    FullDigraph::Node v = (*_graph)(j);
-                    sol[i][j] = (*_cap)[_graph->arc(u, v)];
+                    if (i == j) {
+                        sol[i][j] = 0.0;
+                        continue;
+                    }
+                    FullGraph::Node u = (*_graph)(i);
+                    FullGraph::Node v = (*_graph)(j);
+                    sol[i][j] = (*_cap)[_graph->edge(u, v)];
                 }
             }
             return sol;
-
         }
 
     private:
 
-        bool is_valid_relaxed_solution(unordered_set<int>* s_set) {
+        bool is_valid_relaxed_solution(NodeBoolMap* cutmap) {
+            
+            GomoryHu<FullGraph, FullGraph::EdgeMap<float>> ght(*_graph, *_cap);
+            ght.run();
 
             for (int source = 0; source < _source2sink.size(); source++) {
                 int sink = _source2sink[source];
 
-                FullDigraph::Node u = (*_graph)(source);
-                FullDigraph::Node v = (*_graph)(sink);
+                FullGraph::Node u = (*_graph)(source);
+                FullGraph::Node v = (*_graph)(sink);
+                float flow_value = ght.minCutValue(u, v);
+                ght.minCutMap(u, v, *cutmap);
 
-                Preflow< FullDigraph, FullDigraph::ArcMap<float> > preflow(*_graph, *_cap, u, v);
-                preflow.run();
-                float flow_value = preflow.flowValue();
-                if (flow_value < 1.0) {
-                    for(int i = 0; i < _n; i++) {
-                        FullDigraphBase::Node node = (*_graph)(i);
-                        if (preflow.minCut(node)) {
-                            s_set->insert(i);
-                        }
-                    }
+                if (flow_value < 2.0) {
                     return false;
                 }
-
             }
             return true;
 
         }
 
-        void update_model_constrains(unordered_set<int>& s_set) {
+        void update_model_constrains(NodeBoolMap& cutmap) {
 
             vector<int> s_values;
             vector<int> not_s_values;
 
             for (int i = 0; i < _n; i++) {
-                const bool is_in = s_set.find(i) != s_set.end();
-
-                if (is_in) {
+                FullGraph::Node u = (*_graph)(i);
+                if (cutmap[u]) {
                     s_values.push_back(i);
                 } else {
                     not_s_values.push_back(i);
                 }
             }
 
-            GRBLinExpr expr_out = 0;
-            GRBLinExpr expr_in = 0;
+            GRBLinExpr expr = 0;
             for (int& i : s_values) {
                 for (int& j : not_s_values) {
-                    expr_out += _edge_vars[i][j];
-                    expr_in += _edge_vars[j][i];
+                    expr += _edge_vars[i][j];
                 }
             }
-            _model->addConstr(expr_out >= 1.0);
-            _model->addConstr(expr_in >= 1.0);
+            _model->addConstr(expr >= 2.0);
 
         }
 
@@ -136,12 +136,11 @@ namespace SurvivableNetwork {
                 for (int i = 0; i < _n; i++) {
                     double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars[i], _n);
 
-                    for (int j = 0; j < _n; j++) {
-                        FullDigraph::Node u = (*_graph)(i);
-                        FullDigraph::Node v = (*_graph)(j);
-                        (*_cap)[_graph->arc(u, v)] = sol[j];
+                    for (int j = i + 1; j < _n; j++) {
+                        FullGraph::Node u = (*_graph)(i);
+                        FullGraph::Node v = (*_graph)(j);
+                        (*_cap)[_graph->edge(u, v)] = sol[j];
                     }
-
                 }
             }
             catch (GRBException e) {
@@ -167,32 +166,28 @@ namespace SurvivableNetwork {
             env = new GRBEnv();
             GRBModel* model = new GRBModel(*env);
 
-            // Create decision variables
+            // Create decision variables, only upper right
             for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
+                for (int j = i; j < n; j++) {
                     float dist = vertices_distance(vertices[i], vertices[j]);
                     edge_vars[i][j] = model->addVar(0.0, 1.0, dist,
                         GRB_CONTINUOUS, "x_" + itos(i) + "_" + itos(j));
+                    edge_vars[j][i] = edge_vars[i][j];
                 }
             }
+
+            for (int i = 0; i < n; i++)
+                edge_vars[i][i].set(GRB_DoubleAttr_UB, 0);
 
             // Degree-2 constraints
 
             for (int i = 0; i < n; i++) {
-                GRBLinExpr expr_in = 0;
-                GRBLinExpr expr_out = 0;
+                GRBLinExpr expr = 0;
                 for (int j = 0; j < n; j++) {
-                    expr_in += edge_vars[j][i];
-                    expr_out += edge_vars[i][j];
+                    expr += edge_vars[i][j];
                 }
-                model->addConstr(expr_in >= 1, "deg2_" + itos(i)); // update to >= 1 later
-                model->addConstr(expr_out >= 1, "deg2_" + itos(i));
+                model->addConstr(expr >= 2, "deg2_" + itos(i));
             }
-
-            // Forbid edge from node back to itself
-
-            for (int i = 0; i < n; i++)
-                edge_vars[i][i].set(GRB_DoubleAttr_UB, 0);
 
             return model;
 
