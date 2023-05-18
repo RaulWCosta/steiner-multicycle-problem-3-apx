@@ -2,6 +2,7 @@
 
 #include <lemon/matching.h>
 #include <lemon/adaptors.h>
+#include <lemon/list_graph.h>
 
 #include <limits>
 
@@ -58,17 +59,16 @@ namespace ApxSMCP {
         FilterNodes<FullGraph> subgraph(graph, filter);
         cout << countNodes(subgraph) << endl;
 
-        FullGraph::EdgeMap<float>* inverted_cost = new FullGraph::EdgeMap<float>(subgraph);
+        FilterNodes<FullGraph>::EdgeMap<float>* inverted_cost = new FilterNodes<FullGraph>::EdgeMap<float>(subgraph);
 
         for (auto& i : *odd_vertices) {
             for (auto& j : *odd_vertices) {
                 FullGraph::Node u = graph(i);
                 FullGraph::Node v = graph(j);
                 if (i == j) {
-                    (*inverted_cost)[graph.edge(u, v)] = numeric_limits<float>::min();
                     continue;
                 }
-                (*inverted_cost)[graph.edge(u, v)] = -vertices_distance((*odd_vertices)[i], (*odd_vertices)[j]);
+                (*inverted_cost)[graph.edge(u, v)] = -cost[graph.edge(u, v)];
             }
         }
 

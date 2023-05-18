@@ -62,7 +62,7 @@ Instance read_instance(/*string& circuitfilename*/) {
 
     int indice;
     float x, y;
-    vector<pair<float, float>>* vertices;
+    vector<pair<float, float>>* vertices = new vector<pair<float, float>>;
 
     for (int i = 0; i < nnodes && !in.eof(); i++) {
         getline(in, linha);
@@ -71,7 +71,7 @@ Instance read_instance(/*string& circuitfilename*/) {
         vertices->push_back(elem);
     }
 
-    vector<int>* source2sink;
+    vector<int>* source2sink = new vector<int>;
     for (int i = 0; i < nnodes / 2; i++) {
         source2sink->push_back(i + (int)(nnodes/2));
     }
@@ -87,34 +87,36 @@ Instance read_instance(/*string& circuitfilename*/) {
 
 int main(int argc, char* argv[]) {
     
-    read_instance();
+    // read_instance();
     
-    // int n = 4;
+    int n = 4;
 
-    // vector<int> source2sink = {2, 3};
-    // vector<pair<float, float>> vertices = {
-    //     pair<float, float>(0.0, 0.0),
-    //     pair<float, float>(1.0, 0.0),
-    //     pair<float, float>(1.0, 1.0),
-    //     pair<float, float>(0.0, 1.0),
-    // };
+    vector<int> source2sink = {2, 3};
+    vector<pair<float, float>> vertices = {
+        pair<float, float>(0.0, 0.0),
+        pair<float, float>(1.0, 0.0),
+        pair<float, float>(1.0, 1.0),
+        pair<float, float>(0.0, 1.0),
+    };
 
-    // FullGraph* graph = new FullGraph(n);
-    // FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*_graph);
+    FullGraph* graph = new FullGraph(n);
+    FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
 
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < n; i++) {
-    //         if (i == j) {
-    //             (*cost)[graph->edge(u, v)] = 0.0;
-    //             continue;
-    //         }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            FullGraph::Node u = (*graph)(i);
+            FullGraph::Node v = (*graph)(j);
+            float dist;
+            if (i == j) {
+                continue;
+            }
+            dist = vertices_distance(vertices[i], vertices[j]);
+            (*cost)[graph->edge(u, v)] = dist;
+        }
+    }
 
-    //         FullGraph::Node u = (*graph)(i);
-    //         FullGraph::Node v = (*graph)(j);
-    //         (*cost)[graph->edge(u, v)] = vertices_distance(vertices[i], vertices[j]);
-    //     }
-    // }
+    int** sn_sol = SurvivableNetwork::solve(n, source2sink, *graph, *cost);
+    // ApxSMCP::solve(n, sn_sol, *graph, *cost);
 
-    // SurvivableNetwork::solve(n, source2sink, vertices, *graph, *cost);
-    // // ExactSMCP::solve(n, source2sink, vertices);
+    // ExactSMCP::solve(n, source2sink, vertices);
 }

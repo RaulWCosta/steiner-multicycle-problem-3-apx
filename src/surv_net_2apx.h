@@ -170,7 +170,9 @@ namespace SurvivableNetwork {
                 for (int j = i; j < n; j++) {
                     FullGraph::Node u = graph(i);
                     FullGraph::Node v = graph(j);
-                    float dist = cost[graph.edge(u, v)];
+                    float dist = 0.0f;
+                    if (i != j)
+                        dist = cost[graph.edge(u, v)];
                     edge_vars[i][j] = model->addVar(0.0, 1.0, dist,
                         GRB_CONTINUOUS, "x_" + itos(i) + "_" + itos(j));
                     edge_vars[j][i] = edge_vars[i][j];
@@ -200,7 +202,7 @@ namespace SurvivableNetwork {
         catch (...) {
             cout << "Error during optimization" << endl;
         }
-
+        exit(1);
     }
 
 

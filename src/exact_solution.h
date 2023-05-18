@@ -193,6 +193,7 @@ namespace ExactSMCP {
         catch (...) {
             cout << "Error during optimization" << endl;
         }
+        exit(1);
 
     }
 
