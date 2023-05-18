@@ -1,0 +1,33 @@
+COMMENT: one-to-one m-PDTSP random euclidean instance (seed=555)
+NAME: m5Q25s555.tsp, 11 customers
+DIMENSION: 12
+CAPACITY: 25
+EDGE_WEIGHT_TYPE: EUC_2D
+DEMAND_DIMENSION: 5
+NODE_COORD_SECTION
+1     0.00     0.00
+2   352.00  -190.00
+3  -350.00  -499.00
+4   313.00   -55.00
+5   340.00  -219.00
+6  -388.00  -193.00
+7  -430.00   279.00
+8  -281.00   -47.00
+9   -80.00   270.00
+10  -240.00   169.00
+11  -261.00  -291.00
+12     0.00     0.00
+DEMAND_SECTION
+1    0    0    0    0    0
+2    3    0    0    0    0
+3   -3    0    0    0    0
+4    0    3    0    0    0
+5    0   -3    0    0    0
+6    0    0    3    0    0
+7    0    0   -3    0    0
+8    0    0    0    2    0
+9    0    0    0   -2    0
+10    0    0    0    0    3
+11    0    0    0    0   -3
+12    0    0    0    0    0
+EOF

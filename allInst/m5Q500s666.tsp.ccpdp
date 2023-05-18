@@ -1,0 +1,33 @@
+COMMENT: one-to-one m-PDTSP random euclidean instance (seed=666)
+NAME: m5Q500s666.tsp, 11 customers
+DIMENSION: 12
+CAPACITY: 500
+EDGE_WEIGHT_TYPE: EUC_2D
+DEMAND_DIMENSION: 5
+NODE_COORD_SECTION
+1     0.00     0.00
+2  -286.00   235.00
+3   493.00  -447.00
+4   350.00    60.00
+5   374.00  -467.00
+6   390.00   500.00
+7   153.00   169.00
+8  -465.00  -413.00
+9  -350.00   254.00
+10  -331.00   -15.00
+11   341.00  -493.00
+12     0.00     0.00
+DEMAND_SECTION
+1    0    0    0    0    0
+2    2    0    0    0    0
+3   -2    0    0    0    0
+4    0    2    0    0    0
+5    0   -2    0    0    0
+6    0    0    1    0    0
+7    0    0   -1    0    0
+8    0    0    0    5    0
+9    0    0    0   -5    0
+10    0    0    0    0    3
+11    0    0    0    0   -3
+12    0    0    0    0    0
+EOF
