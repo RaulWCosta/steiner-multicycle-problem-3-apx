@@ -1,8 +1,12 @@
 #pragma once
 
 #include <lemon/matching.h>
+#include <lemon/adaptors.h>
 
-FullGraph* _graph;
+#include <limits>
+
+using namespace std;
+using namespace lemon;
 
 namespace ApxSMCP {
 
@@ -34,80 +38,56 @@ namespace ApxSMCP {
 
     // short_cutting()
 
-    int** solve(int n, int** sn_sol, vector<pair<float, float>>& vertices) {
-
-        vector<int>* odd_vertices = get_odd_degree_nodes(n, sn_sol);
-
-        if (odd_vertices.size() > 0) {
-            
-        }
-
-
-        // F
-        int** int_solution = new int* [n];
-        for (int i = 0; i < n; i++)
-            int_solution[i] = new int[n];
-
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                int_solution[i][j] = 0;
-
-        bool flag_valid_solution = false;
-
-        // cria modelo e adiciona restrições "base"
-        GRBVar** edge_vars = NULL;
-        edge_vars = new GRBVar * [n];
-        for (int i = 0; i < n; i++)
-            edge_vars[i] = new GRBVar[n];
-        GRBModel* model = init_gurobi_model(n, edge_vars, vertices);
-
-        // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
-        //  is not connected to it's pair
-
-        LPSolver lp_solver = LPSolver(n, model, edge_vars, source2sink);
-
-        // enquanto modelo nao retorna solucao viavel
-        while(true) {
-
-            // rodar LP até solução viável do relaxado
-            double** lp_solution = lp_solver.solve();
-
-            print_matrix(n, lp_solution);
-            print_matrix(n, int_solution);
-
-            // adiciona valores >= 0.5 no int_solution
-            update_int_solution(n, lp_solution, int_solution, edge_vars, *model);
-
-            print_matrix(n, int_solution);
-
-            flag_valid_solution = is_valid_int_solution(n, int_solution, source2sink);
-
-            if (flag_valid_solution) {
-                return int_solution;
-            }
-
-            for (int i = 0; i < n; i++)
-                delete[] lp_solution[i];
-            delete[] lp_solution;
-
-        }
+    void short_cutting(int** sol) {
 
     }
 
+    int** solve(int n, int** sn_sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
+
+        vector<int>* odd_vertices = get_odd_degree_nodes(n, sn_sol);
+
+        if (odd_vertices->size() == 0) {  
+            return sn_sol;
+        }
+
+        FullGraph::NodeMap<bool> filter(graph, false);
+        for (auto& i : *odd_vertices) {
+            FullGraph::Node u = graph(i);
+            filter.set(u, true);
+        }
+        FilterNodes<FullGraph> subgraph(graph, filter);
+        cout << countNodes(subgraph) << endl;
+
+        FullGraph::EdgeMap<float>* inverted_cost = new FullGraph::EdgeMap<float>(subgraph);
+
+        for (auto& i : *odd_vertices) {
+            for (auto& j : *odd_vertices) {
+                FullGraph::Node u = graph(i);
+                FullGraph::Node v = graph(j);
+                if (i == j) {
+                    (*inverted_cost)[graph.edge(u, v)] = numeric_limits<float>::min();
+                    continue;
+                }
+                (*inverted_cost)[graph.edge(u, v)] = -vertices_distance((*odd_vertices)[i], (*odd_vertices)[j]);
+            }
+        }
+
+        MaxWeightedPerfectMatching< FilterNodes<FullGraph>, FullGraph::EdgeMap<float> > perf_match(subgraph, *inverted_cost);
+
+        // TODO split init and start of algorithm for eficiency
+        perf_match.run();
+
+        for (auto& i : *odd_vertices) {
+            for (auto& j : *odd_vertices) {
+                FullGraph::Node u = graph(i);
+                FullGraph::Node v = graph(j);
+                if (perf_match.matching(graph.edge(u, v))) {
+                    sn_sol[i][j] = 1;
+                }
+            }
+        }
+
+        return sn_sol;
+    }
+
 }
-
-
-
-// ListDigraph g;
-// ListDigraph::Node x = g.addNode();
-// ListDigraph::Node y = g.addNode();
-// ListDigraph::Node z = g.addNode();
-// ListDigraph::NodeMap<bool> filter(g, true);
-// FilterNodes<ListDigraph> subgraph(g, filter);
-// std::cout << countNodes(subgraph) << ", ";
-// filter[x] = false;
-// std::cout << countNodes(subgraph) << ", ";
-// subgraph.enable(x);
-// subgraph.disable(y);
-// subgraph.status(z, !subgraph.status(z));
-// std::cout << countNodes(subgraph) << std::endl;

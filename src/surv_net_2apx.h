@@ -31,10 +31,9 @@ namespace SurvivableNetwork {
         FullGraph* _graph = NULL;
         FullGraph::EdgeMap<float>* _cap = NULL;
 
-        LPSolver(int n, GRBModel* model, GRBVar** edge_vars, vector<int>& source2sink)
-            : _n(n), _model(model), _edge_vars(edge_vars), _source2sink(source2sink)
+        LPSolver(int n, GRBModel* model, GRBVar** edge_vars, vector<int>& source2sink, FullGraph* graph)
+            : _n(n), _model(model), _edge_vars(edge_vars), _source2sink(source2sink), _graph(graph)
         {
-            _graph = new FullGraph(n);
             _cap = new FullGraph::EdgeMap<float>(*_graph);
         }
 
@@ -157,7 +156,7 @@ namespace SurvivableNetwork {
 
 
 
-    GRBModel* init_gurobi_model(int n, GRBVar** edge_vars, vector<pair<float, float>>& vertices) {
+    GRBModel* init_gurobi_model(int n, GRBVar** edge_vars, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
 
         GRBEnv* env = NULL;
 
@@ -169,7 +168,9 @@ namespace SurvivableNetwork {
             // Create decision variables, only upper right
             for (int i = 0; i < n; i++) {
                 for (int j = i; j < n; j++) {
-                    float dist = vertices_distance(vertices[i], vertices[j]);
+                    FullGraph::Node u = graph(i);
+                    FullGraph::Node v = graph(j);
+                    float dist = cost[graph.edge(u, v)];
                     edge_vars[i][j] = model->addVar(0.0, 1.0, dist,
                         GRB_CONTINUOUS, "x_" + itos(i) + "_" + itos(j));
                     edge_vars[j][i] = edge_vars[i][j];
@@ -266,7 +267,7 @@ namespace SurvivableNetwork {
 
 
     // solve 2-apx
-    int** solve(int n, vector<int>& source2sink, vector<pair<float, float>>& vertices) {
+    int** solve(int n, vector<int>& source2sink, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
 
         // F
         int** int_solution = new int* [n];
@@ -284,12 +285,12 @@ namespace SurvivableNetwork {
         edge_vars = new GRBVar * [n];
         for (int i = 0; i < n; i++)
             edge_vars[i] = new GRBVar[n];
-        GRBModel* model = init_gurobi_model(n, edge_vars, vertices);
+        GRBModel* model = init_gurobi_model(n, edge_vars, graph, cost);
 
         // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
         //  is not connected to it's pair
 
-        LPSolver lp_solver = LPSolver(n, model, edge_vars, source2sink);
+        LPSolver lp_solver = LPSolver(n, model, edge_vars, source2sink, &graph);
 
         // enquanto modelo nao retorna solucao viavel
         while(true) {
