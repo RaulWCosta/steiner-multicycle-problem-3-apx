@@ -83,7 +83,7 @@ namespace ExactSMCP {
                             _curr_sol[i][j] = (int)tmp_solution[j];
                     }
 
-                    vector<int>* invalid_cycle;
+                    vector<int>* invalid_cycle = nullptr;
 
                     if (!is_valid_int_solution(_n, _curr_sol, _source2sink, invalid_cycle)) {
                         // add restrictions

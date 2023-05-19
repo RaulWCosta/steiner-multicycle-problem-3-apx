@@ -39,53 +39,55 @@ namespace ApxSMCP {
 
     // short_cutting()
 
-    void short_cutting(int** sol) {
-
+    int** short_cutting(int** sol) {
+        return sol;
     }
 
     int** solve(int n, int** sn_sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
 
         vector<int>* odd_vertices = get_odd_degree_nodes(n, sn_sol);
 
-        if (odd_vertices->size() == 0) {  
-            return sn_sol;
-        }
+        if (odd_vertices->size() > 0) {  
 
-        FullGraph::NodeMap<bool> filter(graph, false);
-        for (auto& i : *odd_vertices) {
-            FullGraph::Node u = graph(i);
-            filter.set(u, true);
-        }
-        FilterNodes<FullGraph> subgraph(graph, filter);
-        cout << countNodes(subgraph) << endl;
-
-        FilterNodes<FullGraph>::EdgeMap<float>* inverted_cost = new FilterNodes<FullGraph>::EdgeMap<float>(subgraph);
-
-        for (auto& i : *odd_vertices) {
-            for (auto& j : *odd_vertices) {
+            FullGraph::NodeMap<bool> filter(graph, false);
+            for (auto& i : *odd_vertices) {
                 FullGraph::Node u = graph(i);
-                FullGraph::Node v = graph(j);
-                if (i == j) {
-                    continue;
-                }
-                (*inverted_cost)[graph.edge(u, v)] = -cost[graph.edge(u, v)];
+                filter.set(u, true);
             }
-        }
+            FilterNodes<FullGraph> subgraph(graph, filter);
+            cout << countNodes(subgraph) << endl;
 
-        MaxWeightedPerfectMatching< FilterNodes<FullGraph>, FullGraph::EdgeMap<float> > perf_match(subgraph, *inverted_cost);
+            FilterNodes<FullGraph>::EdgeMap<float>* inverted_cost = new FilterNodes<FullGraph>::EdgeMap<float>(subgraph);
 
-        // TODO split init and start of algorithm for eficiency
-        perf_match.run();
-
-        for (auto& i : *odd_vertices) {
-            for (auto& j : *odd_vertices) {
-                FullGraph::Node u = graph(i);
-                FullGraph::Node v = graph(j);
-                if (perf_match.matching(graph.edge(u, v))) {
-                    sn_sol[i][j] = 1;
+            for (auto& i : *odd_vertices) {
+                for (auto& j : *odd_vertices) {
+                    FullGraph::Node u = graph(i);
+                    FullGraph::Node v = graph(j);
+                    if (i == j) {
+                        continue;
+                    }
+                    (*inverted_cost)[graph.edge(u, v)] = -cost[graph.edge(u, v)];
                 }
             }
+
+            MaxWeightedPerfectMatching< FilterNodes<FullGraph>, FullGraph::EdgeMap<float> > perf_match(subgraph, *inverted_cost);
+
+            // TODO split init and start of algorithm for eficiency
+            perf_match.run();
+
+            for (auto& i : *odd_vertices) {
+                for (auto& j : *odd_vertices) {
+                    FullGraph::Node u = graph(i);
+                    FullGraph::Node v = graph(j);
+                    if (perf_match.matching(graph.edge(u, v))) {
+                        sn_sol[i][j] = 1;
+                    }
+                }
+            }
+
         }
+
+        sn_sol = short_cutting(sn_sol);
 
         return sn_sol;
     }
