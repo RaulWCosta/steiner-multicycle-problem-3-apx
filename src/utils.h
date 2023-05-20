@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "libs/dirent.h"
+
 
 using namespace std;
 
@@ -78,7 +78,7 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
 
     int indice;
     float x, y;
-    vertices = new vector<pair<float, float>>;
+    
 
     for (int i = 0; i < nnodes && !in.eof(); i++) {
         getline(in, linha);
@@ -87,7 +87,6 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
         vertices->push_back(elem);
     }
 
-    source2sink = new vector<int>;
     for (int i = 0; i < nnodes / 2; i++) {
         source2sink->push_back(i + (int)(nnodes/2));
     }
@@ -99,36 +98,21 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
 
 void findDataFiles(string folder, vector<string> *files){
 
-    DIR *dir;
-    struct dirent *diread;
+    string file_path;
+    string line = "";
+    file_path = folder + "/files.lst";
+    fstream file_obj;
+    file_obj.open(file_path, ios::in);
 
-    if ( (dir = opendir(folder.c_str())) == nullptr){
+    if (!file_obj.is_open()) {
         cout << "Deu problema!" << endl;
         exit(1);
     }
 
-    while( (diread = readdir(dir)) != nullptr) {
-        if ( strcmp(diread->d_name, "files.lst") == 0 ){
-            //abre o arquivo "files.lst" e pega a lista de arquivos com os problemas para analisar
-            string file_path;
-            string line = "";
-            file_path = folder + "/files.lst";
-            fstream file_obj;
-            file_obj.open(file_path, ios::in);
-            while(getline(file_obj, line)) {
-                string full_path;
-                full_path = folder + "/" + line;
-                files->push_back(full_path);
-            }
-
-        }else{
-            if ( (diread->d_type != isFile)
-            &&  (strcmp(diread->d_name,".")  != 0)
-            &&  (strcmp(diread->d_name, "..") != 0) ){
-                string aux_folder = folder +"/"+ string(diread->d_name);
-                findDataFiles( aux_folder, files);
-            }
-        }
+    while(getline(file_obj, line)) {
+        string full_path;
+        full_path = folder + "/" + line;
+        files->push_back(full_path);
     }
 
 }
