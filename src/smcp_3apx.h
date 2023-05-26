@@ -44,7 +44,7 @@ namespace ApxSMCP {
         vector<int> vertices_degrees;
         vertices_degrees.reserve(n);
 
-        
+
         
         return sol;
     }
@@ -93,7 +93,7 @@ namespace ApxSMCP {
 
         }
 
-        sn_sol = short_cutting(sn_sol);
+        sn_sol = short_cutting(n, sn_sol);
 
         return sn_sol;
     }

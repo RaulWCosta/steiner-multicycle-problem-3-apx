@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
         vector<pair<float, float>> vertices;
         vertices.reserve(n);
 
-        read_instance(file, &n, vertices);
+        read_instance(file, &n, &vertices);
 
         // int n = 4;
 
@@ -52,11 +52,11 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // int** sn_sol = SurvivableNetwork::solve(n, *graph, *cost);
-        // sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
-        // print_matrix(n, sn_sol);
+        int** sn_sol = SurvivableNetwork::solve(n, *graph, *cost);
+        sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
+        print_matrix(n, sn_sol);
 
-        ExactSMCP::solve(n, vertices);
+        // ExactSMCP::solve(n, vertices);
 
         delete graph;
         delete cost;
