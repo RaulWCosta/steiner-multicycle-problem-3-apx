@@ -22,7 +22,8 @@ int main(int argc, char* argv[]) {
     for (string& file : *files) {
 
         int n = 0;
-        vector<pair<float, float>>* vertices = new vector<pair<float, float>>;;
+        vector<pair<float, float>> vertices;
+        vertices.reserve(n);
 
         read_instance(file, &n, vertices);
 
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]) {
                 if (i == j) {
                     continue;
                 }
-                dist = vertices_distance((*vertices)[i], (*vertices)[j]);
+                dist = vertices_distance(vertices[i], vertices[j]);
                 (*cost)[graph->edge(u, v)] = dist;
             }
         }
@@ -55,10 +56,13 @@ int main(int argc, char* argv[]) {
         // sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
         // print_matrix(n, sn_sol);
 
-        ExactSMCP::solve(n, *vertices);
+        ExactSMCP::solve(n, vertices);
 
-        delete vertices;
+        delete graph;
+        delete cost;
 
     }
+
+    delete files;
 
 }

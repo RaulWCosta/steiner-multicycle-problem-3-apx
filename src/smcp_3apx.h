@@ -39,7 +39,13 @@ namespace ApxSMCP {
 
     // short_cutting()
 
-    int** short_cutting(int** sol) {
+    int** short_cutting(int n, int** sol) {
+        
+        vector<int> vertices_degrees;
+        vertices_degrees.reserve(n);
+
+        
+        
         return sol;
     }
 
