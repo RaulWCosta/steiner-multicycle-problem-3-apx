@@ -27,12 +27,11 @@ namespace SurvivableNetwork {
         int _n;
         GRBModel* _model;
         GRBVar** _edge_vars;
-        vector<int> _source2sink;
         FullGraph* _graph = NULL;
         FullGraph::EdgeMap<float>* _cap = NULL;
 
-        LPSolver(int n, GRBModel* model, GRBVar** edge_vars, vector<int>& source2sink, FullGraph* graph)
-            : _n(n), _model(model), _edge_vars(edge_vars), _source2sink(source2sink), _graph(graph)
+        LPSolver(int n, GRBModel* model, GRBVar** edge_vars, FullGraph* graph)
+            : _n(n), _model(model), _edge_vars(edge_vars), _graph(graph)
         {
             _cap = new FullGraph::EdgeMap<float>(*_graph);
         }
@@ -83,9 +82,9 @@ namespace SurvivableNetwork {
             
             GomoryHu<FullGraph, FullGraph::EdgeMap<float>> ght(*_graph, *_cap);
             ght.run();
-
-            for (int source = 0; source < _source2sink.size(); source++) {
-                int sink = _source2sink[source];
+            int half_n = (int)(_n / 2);
+            for (int source = 0; source < half_n; source++) {
+                int sink = source + half_n;
 
                 FullGraph::Node u = (*_graph)(source);
                 FullGraph::Node v = (*_graph)(sink);
@@ -222,12 +221,12 @@ namespace SurvivableNetwork {
     }
 
 
-    bool is_valid_int_solution(int n, int** current_solution, vector<int>& source2sink) {
+    bool is_valid_int_solution(int n, int** current_solution) {
 
         vector<int> stack;
-
-        for (int s = 0; s < source2sink.size(); s++) {
-            int t = source2sink[s];
+        int half_n = (int)(n / 2);
+        for (int s = 0; s < half_n; s++) {
+            int t = s + half_n;
 
             bool flag_valid_cycle = false;
             vector<bool> visited(n, false);
@@ -269,7 +268,7 @@ namespace SurvivableNetwork {
 
 
     // solve 2-apx
-    int** solve(int n, vector<int>& source2sink, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
+    int** solve(int n, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
 
         // F
         int** int_solution = new int* [n];
@@ -292,7 +291,7 @@ namespace SurvivableNetwork {
         // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
         //  is not connected to it's pair
 
-        LPSolver lp_solver = LPSolver(n, model, edge_vars, source2sink, &graph);
+        LPSolver lp_solver = LPSolver(n, model, edge_vars, &graph);
 
         // enquanto modelo nao retorna solucao viavel
         while(true) {
@@ -308,7 +307,7 @@ namespace SurvivableNetwork {
 
             print_matrix(n, int_solution);
 
-            flag_valid_solution = is_valid_int_solution(n, int_solution, source2sink);
+            flag_valid_solution = is_valid_int_solution(n, int_solution);
 
             if (flag_valid_solution) {
                 return int_solution;

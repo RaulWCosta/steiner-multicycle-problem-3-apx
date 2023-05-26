@@ -13,10 +13,10 @@ using namespace lemon;
 
 namespace ExactSMCP {
 
-    bool is_valid_int_solution(int n, int** current_solution, vector<int>& source2sink, vector<int>* stack) {
-
-        for (int s = 0; s < source2sink.size(); s++) {
-            int t = source2sink[s];
+    bool is_valid_int_solution(int n, int** current_solution, vector<int>* stack) {
+        int half_n = (int)(n/2);
+        for (int s = 0; s < half_n; s++) {
+            int t = s + half_n;
 
             bool flag_valid_cycle = false;
             vector<bool> visited(n, false);
@@ -62,10 +62,9 @@ namespace ExactSMCP {
         GRBVar** _edge_vars;
         int _n;
         int** _curr_sol;
-        vector<int> _source2sink;
 
-        FeasibleSolCallback(GRBVar** vars, int n, vector<int>& source2sink)
-            : _edge_vars(vars), _n(n), _source2sink(source2sink)
+        FeasibleSolCallback(GRBVar** vars, int n)
+            : _edge_vars(vars), _n(n)
         {
             _curr_sol = new int* [n];
             for (int i = 0; i < n; i++)
@@ -85,7 +84,7 @@ namespace ExactSMCP {
 
                     vector<int>* invalid_cycle = nullptr;
 
-                    if (!is_valid_int_solution(_n, _curr_sol, _source2sink, invalid_cycle)) {
+                    if (!is_valid_int_solution(_n, _curr_sol, invalid_cycle)) {
                         // add restrictions
                         update_model_constrains(*invalid_cycle);
                     }
@@ -140,8 +139,7 @@ namespace ExactSMCP {
     GRBModel* init_gurobi_model(
         int n,
         GRBVar** edge_vars,
-        vector<pair<float, float>>& vertices,
-        vector<int>& source2sink
+        vector<pair<float, float>>& vertices
     ) {
 
         GRBEnv* env = NULL;
@@ -180,7 +178,7 @@ namespace ExactSMCP {
             //     edge_vars[i][i].set(GRB_IntAttr_UB, 0);
 
             // set callback
-            FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n, source2sink);
+            FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n);
             model->setCallback(&cb);
             
             return model;
@@ -220,12 +218,12 @@ namespace ExactSMCP {
         }
     }
 
-    void solve(int n, vector<int>& source2sink, vector<pair<float, float>>& vertices) {
+    void solve(int n, vector<pair<float, float>>& vertices) {
         GRBVar** edge_vars = NULL;
         edge_vars = new GRBVar * [n];
         for (int i = 0; i < n; i++)
             edge_vars[i] = new GRBVar[n];
-        GRBModel* model = init_gurobi_model(n, edge_vars, vertices, source2sink);
+        GRBModel* model = init_gurobi_model(n, edge_vars, vertices);
 
         double** sol = new double* [n];
         optimize(n, model, edge_vars, sol);

@@ -33,7 +33,7 @@ float vertices_distance(const std::pair<float, float>& a, const std::pair<float,
 }
 
 
-void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* vertices, vector<int>* source2sink) {
+void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* vertices) {
     // string circuitfilename = "../../../allInst/toy.ccpdp";
     ifstream in;
     string linha, substring, name;
@@ -85,10 +85,6 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
         sscanf_s(linha.c_str(), "%d\t%f\t%f", &indice, &x, &y);
         pair<float, float> elem = {x, y};
         vertices->push_back(elem);
-    }
-
-    for (int i = 0; i < nnodes / 2; i++) {
-        source2sink->push_back(i + (int)(nnodes/2));
     }
 
     *n = nnodes;

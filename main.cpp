@@ -23,13 +23,11 @@ int main(int argc, char* argv[]) {
 
         int n = 0;
         vector<pair<float, float>>* vertices = new vector<pair<float, float>>;;
-        vector<int>* source2sink = new vector<int>;
 
-        read_instance(file, &n, vertices, source2sink);
+        read_instance(file, &n, vertices);
 
         // int n = 4;
 
-        // vector<int> source2sink = {2, 3};
         // vector<pair<float, float>> vertices = {
         //     pair<float, float>(0.0, 0.0),
         //     pair<float, float>(1.0, 0.0),
@@ -53,15 +51,13 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        int** sn_sol = SurvivableNetwork::solve(n, *source2sink, *graph, *cost);
+        // int** sn_sol = SurvivableNetwork::solve(n, *graph, *cost);
+        // sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
+        // print_matrix(n, sn_sol);
 
-        sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
+        ExactSMCP::solve(n, *vertices);
 
-        print_matrix(n, sn_sol);
-
-        // ExactSMCP::solve(n, source2sink, vertices);
         delete vertices;
-        delete source2sink;
 
     }
 
