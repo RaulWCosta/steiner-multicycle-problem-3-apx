@@ -169,7 +169,7 @@ namespace ExactSMCP {
                 for (int j = i + 1; j < n; j++) {
                     expr += edge_vars[i][j];
                 }
-                model->addConstr(expr == 2, "deg2_" + itos(i));
+                model->addConstr(expr >= 2, "deg2_" + itos(i));
             }
 
             // Forbid edge from node back to itself
@@ -196,7 +196,7 @@ namespace ExactSMCP {
     }
 
 
-    void optimize(int n, GRBModel* model, GRBVar** vars, double** sol) {
+    void optimize_model(int n, GRBModel* model, GRBVar** vars, double** sol) {
 
         try {
             model->optimize();
@@ -226,7 +226,7 @@ namespace ExactSMCP {
         GRBModel* model = init_gurobi_model(n, edge_vars, vertices);
 
         double** sol = new double* [n];
-        optimize(n, model, edge_vars, sol);
+        optimize_model(n, model, edge_vars, sol);
 
         print_matrix(n, sol);
 
