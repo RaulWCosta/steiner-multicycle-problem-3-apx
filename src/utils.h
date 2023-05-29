@@ -72,7 +72,7 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
     }
 
     if (in.eof()) {
-        cout << "Deu problema!" << endl;
+        cout << "Deu problema aqui!" << endl;
         exit(1);
     }
 
@@ -94,14 +94,12 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
 
 void findDataFiles(string folder, vector<string> *files){
 
-    string file_path;
     string line = "";
-    file_path = folder + "/files.lst";
-    fstream file_obj;
-    file_obj.open(file_path, ios::in);
+    string file_path = folder + "/files.lst";
+    std::ifstream file_obj(file_path);
 
     if (!file_obj.is_open()) {
-        cout << "Deu problema!" << endl;
+        cout << "Deu problema 2!" << endl;
         exit(1);
     }
 
