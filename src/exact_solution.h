@@ -62,11 +62,13 @@ namespace ExactSMCP {
         GRBVar** _edge_vars;
         int _n;
         int** _curr_sol;
+        vector<int>* _invalid_cycle;
 
         FeasibleSolCallback(GRBVar** vars, int n)
             : _edge_vars(vars), _n(n)
         {
             _curr_sol = new int* [n];
+            _invalid_cycle = new vector<int>;
             for (int i = 0; i < n; i++)
                 _curr_sol[i] = new int[n];
         }
@@ -82,15 +84,14 @@ namespace ExactSMCP {
                             _curr_sol[i][j] = (int)tmp_solution[j];
                     }
 
-                    vector<int>* invalid_cycle = nullptr;
-
-                    if (!is_valid_int_solution(_n, _curr_sol, invalid_cycle)) {
+                    if (!is_valid_int_solution(_n, _curr_sol, _invalid_cycle)) {
                         // add restrictions
-                        update_model_constrains(*invalid_cycle);
+                        update_model_constrains(*_invalid_cycle);
                     }
 
                     delete[] tmp_solution;
                 }
+                return;
             }
             catch (GRBException e) {
                 cout << "Error number: " << e.getErrorCode() << endl;
@@ -99,6 +100,7 @@ namespace ExactSMCP {
             catch (...) {
                 cout << "Error during callback" << endl;
             }
+            exit(1);
         }
 
         void update_model_constrains(vector<int>& invalid_cycle) {
@@ -124,10 +126,7 @@ namespace ExactSMCP {
             GRBLinExpr expr = 0;
             for (int& i : s_values) {
                 for (int& j : not_s_values) {
-                    if (j > i)
-                        expr += _edge_vars[i][j];
-                    else
-                        expr += _edge_vars[j][i];
+                    expr += _edge_vars[i][j];
                 }
             }
             addLazy(expr >= 2);
@@ -136,97 +135,57 @@ namespace ExactSMCP {
 
     };
 
-    GRBModel* init_gurobi_model(
-        int n,
-        GRBVar** edge_vars,
-        vector<pair<float, float>>& vertices
-    ) {
-
-        GRBEnv* env = NULL;
-
-        try {
-
-            env = new GRBEnv();
-            GRBModel* model = new GRBModel(*env);
-
-            // Must set LazyConstraints parameter when using lazy constraints
-            model->set(GRB_IntParam_LazyConstraints, 1);
-
-            // Create decision variables
-
-            for (int i = 0; i < n; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    float dist = vertices_distance(vertices[i], vertices[j]);
-                    edge_vars[i][j] = model->addVar(0.0, 2.0, dist,
-                        GRB_INTEGER, "x_" + itos(i) + "_" + itos(j));
-                }
-            }
-
-            // Degree-2 constraints
-
-            for (int i = 0; i < n; i++) {
-                GRBLinExpr expr = 0;
-                for (int j = i + 1; j < n; j++) {
-                    expr += edge_vars[i][j];
-                }
-                model->addConstr(expr >= 2, "deg2_" + itos(i));
-            }
-
-            // Forbid edge from node back to itself
-
-            // for (int i = 0; i < n; i++)
-            //     edge_vars[i][i].set(GRB_IntAttr_UB, 0);
-
-            // set callback
-            FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n);
-            model->setCallback(&cb);
-            
-            return model;
-
-        }
-        catch (GRBException e) {
-            cout << "Error number: " << e.getErrorCode() << endl;
-            cout << e.getMessage() << endl;
-        }
-        catch (...) {
-            cout << "Error during optimization" << endl;
-        }
-        exit(1);
-
-    }
-
-
-    void optimize_model(int n, GRBModel* model, GRBVar** vars, double** sol) {
-
-        try {
-            model->optimize();
-
-            if (model->get(GRB_IntAttr_SolCount) > 0) {
-                
-                for (int i = 0; i < n; i++)
-                    sol[i] = model->get(GRB_DoubleAttr_X, vars[i], n);
-
-            }
-
-        }
-        catch (GRBException e) {
-            cout << "Error number: " << e.getErrorCode() << endl;
-            cout << e.getMessage() << endl;
-        }
-        catch (...) {
-            cout << "Error during callback" << endl;
-        }
-    }
-
     void solve(int n, vector<pair<float, float>>& vertices) {
-        GRBVar** edge_vars = NULL;
-        edge_vars = new GRBVar * [n];
+
+        GRBEnv* env = new GRBEnv();
+        GRBModel model = GRBModel(*env);
+
+        GRBVar** edge_vars = new GRBVar * [n];
         for (int i = 0; i < n; i++)
             edge_vars[i] = new GRBVar[n];
-        GRBModel* model = init_gurobi_model(n, edge_vars, vertices);
+
+        // Must set LazyConstraints parameter when using lazy constraints
+        model.set(GRB_IntParam_LazyConstraints, 1);
+
+        // Create decision variables
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j <= i; j++) {
+                float dist = vertices_distance(vertices[i], vertices[j]);
+                edge_vars[i][j] = model.addVar(0.0, 2.0, dist,
+                    GRB_INTEGER, "x_" + itos(i) + "_" + itos(j));
+                edge_vars[j][i] = edge_vars[i][j];
+            }
+        }
+
+        // Forbid edge from node back to itself
+        for (int i = 0; i < n; i++)
+            edge_vars[i][i].set(GRB_DoubleAttr_UB, 0);
+
+        // Degree-2 constraints
+        vector<GRBLinExpr> expr_vec(n, 0);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                expr_vec[i] += edge_vars[i][j];
+                expr_vec[j] += edge_vars[i][j];
+            }
+        }
+        for (int i = 0; i < n; i++)
+            model.addConstr(expr_vec[i] >= 2, "deg2_" + itos(i));
+
+        // set callback
+        FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n);
+        model.setCallback(&cb);
 
         double** sol = new double* [n];
-        optimize_model(n, model, edge_vars, sol);
+
+        model.optimize();
+
+        if (model.get(GRB_IntAttr_SolCount) > 0) {
+            for (int i = 0; i < n; i++)
+                sol[i] = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
+        }
 
         print_matrix(n, sol);
 
