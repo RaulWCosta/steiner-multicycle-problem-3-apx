@@ -36,6 +36,15 @@ int main(int argc, char* argv[]) {
         //     pair<float, float>(0.0, 1.0),
         // };
 
+        // F
+        int** sol = new int* [n];
+        for (int i = 0; i < n; i++)
+            sol[i] = new int[n];
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                sol[i][j] = 0;
+
         FullGraph* graph = new FullGraph(n);
         FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
 
@@ -52,17 +61,21 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        int** sn_sol = SurvivableNetwork::solve(n, *graph, *cost);
-        sn_sol = ApxSMCP::solve(n, sn_sol, *graph, *cost);
-        print_matrix(n, sn_sol);
+        SurvivableNetwork::solve(n, *graph, *cost, sol);
+        sol = ApxSMCP::solve(n, sol, *graph, *cost);
 
-        // ExactSMCP::solve(n, vertices);
+        // TODO fix: file = ../../../allInst/rg-016-q-1x1.0003.ccpdp com vertice de grau impar!
+        // ExactSMCP::solve(n, vertices, sol);
 
-        verify_solution(file, n, sn_sol);
+        print_matrix(n, sol);
+
+        // verify_solution(file, n, sol);
 
         delete graph;
         delete cost;
-
+        for (int i = 0; i < n; i++)
+            delete[] sol[i];
+        delete[] sol;
     }
 
     delete files;

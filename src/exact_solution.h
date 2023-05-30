@@ -135,7 +135,7 @@ namespace ExactSMCP {
 
     };
 
-    void solve(int n, vector<pair<float, float>>& vertices) {
+    void solve(int n, vector<pair<float, float>>& vertices, int** int_sol) {
 
         GRBEnv* env = new GRBEnv();
         GRBModel model = GRBModel(*env);
@@ -187,7 +187,11 @@ namespace ExactSMCP {
                 sol[i] = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
         }
 
-        print_matrix(n, sol);
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                int_sol[i][j] = (int)(sol[i][j] + 0.001);
+
+        // print_matrix(n, int_sol);
 
         for (int i = 0; i < n; i++)
             delete[] sol[i];

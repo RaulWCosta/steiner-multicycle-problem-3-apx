@@ -29,11 +29,16 @@ namespace SurvivableNetwork {
         GRBVar** _edge_vars;
         FullGraph* _graph = NULL;
         FullGraph::EdgeMap<float>* _cap = NULL;
+        double** _current_solution = nullptr;
 
         LPSolver(int n, GRBModel* model, GRBVar** edge_vars, FullGraph* graph)
             : _n(n), _model(model), _edge_vars(edge_vars), _graph(graph)
         {
             _cap = new FullGraph::EdgeMap<float>(*_graph);
+
+            _current_solution = new double* [_n];
+            for (int i = 0; i < _n; i++)
+                _current_solution[i] = new double[_n];
         }
 
         double** solve() {
@@ -58,22 +63,20 @@ namespace SurvivableNetwork {
 
             }
 
-            double** sol = new double* [_n];
-            for (int i = 0; i < _n; i++)
-                sol[i] = new double[_n];
+
 
             for (int i = 0; i < _n; i++) {
                 for (int j = 0; j < _n; j++) {
                     if (i == j) {
-                        sol[i][j] = 0.0;
+                        _current_solution[i][j] = 0.0;
                         continue;
                     }
                     FullGraph::Node u = (*_graph)(i);
                     FullGraph::Node v = (*_graph)(j);
-                    sol[i][j] = (*_cap)[_graph->edge(u, v)];
+                    _current_solution[i][j] = (*_cap)[_graph->edge(u, v)];
                 }
             }
-            return sol;
+            return _current_solution;
         }
 
     private:
@@ -271,16 +274,7 @@ namespace SurvivableNetwork {
 
 
     // solve 2-apx
-    int** solve(int n, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
-
-        // F
-        int** int_solution = new int* [n];
-        for (int i = 0; i < n; i++)
-            int_solution[i] = new int[n];
-
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                int_solution[i][j] = 0;
+    void solve(int n, FullGraph& graph, FullGraph::EdgeMap<float>& cost, int** int_solution) {
 
         bool flag_valid_solution = false;
 
@@ -297,13 +291,13 @@ namespace SurvivableNetwork {
         LPSolver lp_solver = LPSolver(n, model, edge_vars, &graph);
 
         // enquanto modelo nao retorna solucao viavel
-        while(true) {
+        while(!flag_valid_solution) {
 
             // rodar LP até solução viável do relaxado
             double** lp_solution = lp_solver.solve();
 
-            print_matrix(n, lp_solution);
-            print_matrix(n, int_solution);
+            // print_matrix(n, lp_solution);
+            // print_matrix(n, int_solution);
 
             // adiciona valores >= 0.5 no int_solution
             update_int_solution(n, lp_solution, int_solution, edge_vars, *model);
@@ -311,14 +305,6 @@ namespace SurvivableNetwork {
             print_matrix(n, int_solution);
 
             flag_valid_solution = is_valid_int_solution(n, int_solution);
-
-            if (flag_valid_solution) {
-                return int_solution;
-            }
-
-            for (int i = 0; i < n; i++)
-                delete[] lp_solution[i];
-            delete[] lp_solution;
 
         }
 
