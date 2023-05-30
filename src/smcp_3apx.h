@@ -75,7 +75,7 @@ namespace ApxSMCP {
                     (*inverted_cost)[graph.edge(u, v)] = -cost[graph.edge(u, v)];
                 }
             }
-
+            // TODO ../../../allInst/m10Q10s555.tsp.ccpdp tem vertice de grau impar
             MaxWeightedPerfectMatching< FilterNodes<FullGraph>, FullGraph::EdgeMap<float> > perf_match(subgraph, *inverted_cost);
 
             // TODO split init and start of algorithm for eficiency

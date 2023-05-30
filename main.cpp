@@ -58,6 +58,8 @@ int main(int argc, char* argv[]) {
 
         // ExactSMCP::solve(n, vertices);
 
+        verify_solution(file, n, sn_sol);
+
         delete graph;
         delete cost;
 

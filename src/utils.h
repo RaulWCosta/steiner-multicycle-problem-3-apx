@@ -110,3 +110,26 @@ void findDataFiles(string folder, vector<string> *files){
     }
 
 }
+
+void verify_solution(string file_name, int n, int** sol) {
+    vector<int> vertices_degree(n, 0);
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            vertices_degree[i] += sol[i][j];
+            vertices_degree[j] += sol[i][j];
+        }
+    }
+
+    for (int i = 0; i < vertices_degree.size(); i++) {
+        if (vertices_degree[i] % 2) {
+            cout << "file = " << file_name << " com vertice de grau impar!" << endl;
+            exit(1);
+        }
+    }
+
+    // TODO tambem checar se pares estão conectados
+}
+
+// float get_sol_val(int n, int** sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
+
+// }

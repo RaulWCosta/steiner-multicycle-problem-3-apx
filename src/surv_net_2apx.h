@@ -91,7 +91,7 @@ namespace SurvivableNetwork {
                 float flow_value = ght.minCutValue(u, v);
                 ght.minCutMap(u, v, *cutmap);
 
-                if (flow_value < 2.0) {
+                if (flow_value < 1.999) { // rounding error
                     return false;
                 }
             }
@@ -116,7 +116,10 @@ namespace SurvivableNetwork {
             GRBLinExpr expr = 0;
             for (int& i : s_values) {
                 for (int& j : not_s_values) {
-                    expr += _edge_vars[i][j];
+                    if (i < j)
+                        expr += _edge_vars[i][j];
+                    else
+                        expr += _edge_vars[j][i];
                 }
             }
             _model->addConstr(expr >= 2.0);
@@ -210,7 +213,7 @@ namespace SurvivableNetwork {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int old_value = current_solution[i][j];
-                current_solution[i][j] = (int)(lp_solution[i][j] + 0.5);
+                current_solution[i][j] = (int)(lp_solution[i][j] + 0.5001); // rounding error
                 if (!old_value && current_solution[i][j]) {
                     // trava o valor dessa aresta como 1
                     model.addConstr(edge_vars[i][j] == 1.0, "add_edge_(" + itos(i) + "," + itos(j) + ")");
