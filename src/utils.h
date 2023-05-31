@@ -111,6 +111,51 @@ void findDataFiles(string folder, vector<string> *files){
 
 }
 
+    bool verify_terminals_connected(int n, int** sol) {
+        int half_n = (int)(n/2);
+        vector<int> stack;
+
+        for (int s = 0; s < half_n; s++) {
+            int t = s + half_n;
+
+            bool flag_valid_cycle = false;
+            vector<bool> visited(n, false);
+
+            stack.clear();
+
+            visited[s] = true;
+            stack.push_back(s);
+
+            while (!stack.empty()) {
+                int curr_node = stack[stack.size() - 1];
+                stack.pop_back();
+
+                if (curr_node == t) {
+                    flag_valid_cycle = true;
+                    break;
+                }
+
+                for (int i = 0; i < n; i++) {
+                    if (!sol[curr_node][i])
+                        continue;
+
+                    if (!visited[i]) {
+                        visited[i] = true;
+                        stack.push_back(i);
+                    }
+                }
+            }
+
+            if (!flag_valid_cycle) {
+                // ciclo invalido!
+                return false;
+            }
+
+        }
+        return true;
+
+    }
+
 void verify_solution(string file_name, int n, int** sol) {
     vector<int> vertices_degree(n, 0);
     for (int i = 0; i < n; i++) {
@@ -122,12 +167,16 @@ void verify_solution(string file_name, int n, int** sol) {
 
     for (int i = 0; i < vertices_degree.size(); i++) {
         if (vertices_degree[i] % 2) {
-            cout << "file = " << file_name << " com vertice de grau impar!" << endl;
+            cout << "file = " << file_name << " com vertice " << i << " de grau impar!" << endl;
             exit(1);
         }
     }
 
-    // TODO tambem checar se pares estão conectados
+    // check if terminals are connected
+    if (!verify_terminals_connected(n, sol)) {
+        cout << "file = " << file_name << " com teminais desconectados!" << endl;
+    }
+
 }
 
 // float get_sol_val(int n, int** sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {

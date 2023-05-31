@@ -13,48 +13,6 @@ using namespace lemon;
 
 namespace ExactSMCP {
 
-    bool is_valid_int_solution(int n, int** current_solution, vector<int>* stack) {
-        int half_n = (int)(n/2);
-        for (int s = 0; s < half_n; s++) {
-            int t = s + half_n;
-
-            bool flag_valid_cycle = false;
-            vector<bool> visited(n, false);
-
-            stack->clear();
-
-            visited[s] = true;
-            stack->push_back(s);
-
-            while (!stack->empty()) {
-                int curr_node = (*stack)[stack->size() - 1];
-                stack->pop_back();
-
-                if (curr_node == t) {
-                    flag_valid_cycle = true;
-                    break;
-                }
-
-                for (int i = 0; i < n; i++) {
-                    if (!current_solution[curr_node][i])
-                        continue;
-
-                    if (!visited[i]) {
-                        visited[i] = true;
-                        stack->push_back(i);
-                    }
-                }
-            }
-
-            if (!flag_valid_cycle) {
-                // ciclo invalido!
-                return false;
-            }
-
-        }
-        return true;
-
-    }
 
     class FeasibleSolCallback : public GRBCallback
     {
@@ -62,34 +20,38 @@ namespace ExactSMCP {
         GRBVar** _edge_vars;
         int _n;
         int** _curr_sol;
-        vector<int>* _invalid_cycle;
+        FullGraph* _graph = NULL;
+        FullGraph::EdgeMap<int>* _cap = NULL;
 
-        FeasibleSolCallback(GRBVar** vars, int n)
-            : _edge_vars(vars), _n(n)
+        FeasibleSolCallback(int n, GRBVar** vars, FullGraph* graph)
+            : _edge_vars(vars), _n(n), _graph(graph)
         {
-            _curr_sol = new int* [n];
-            _invalid_cycle = new vector<int>;
-            for (int i = 0; i < n; i++)
-                _curr_sol[i] = new int[n];
+            _cap = new FullGraph::EdgeMap<int>(*_graph);
         }
 
     protected:
         void callback() {
             try {
                 if (where == GRB_CB_MIPSOL) {
+
+                    NodeBoolMap cutmap(*_graph);
+
                     double* tmp_solution;
                     for (int i = 0; i < _n; i++) {
                         tmp_solution = getSolution(_edge_vars[i], _n);
-                        for (int j = i + 1; j < _n; j++)
-                            _curr_sol[i][j] = (int)tmp_solution[j];
+                        for (int j = i + 1; j < _n; j++) {
+                            FullGraph::Node u = (*_graph)(i);
+                            FullGraph::Node v = (*_graph)(j);
+                            (*_cap)[_graph->edge(u, v)] = (int)(tmp_solution[j] + 0.01);
+                        }
                     }
 
-                    if (!is_valid_int_solution(_n, _curr_sol, _invalid_cycle)) {
+                    if (!is_valid_solution(&cutmap)) {
                         // add restrictions
-                        update_model_constrains(*_invalid_cycle);
+                        update_model_constrains(cutmap);
                     }
 
-                    delete[] tmp_solution;
+                    // delete[] tmp_solution;
                 }
                 return;
             }
@@ -103,20 +65,35 @@ namespace ExactSMCP {
             exit(1);
         }
 
-        void update_model_constrains(vector<int>& invalid_cycle) {
+        bool is_valid_solution(NodeBoolMap* cutmap) {
+            
+            GomoryHu<FullGraph, FullGraph::EdgeMap<int>> ght(*_graph, *_cap);
+            ght.run();
+            int half_n = (int)(_n / 2);
+            for (int source = 0; source < half_n; source++) {
+                int sink = source + half_n;
 
-            unordered_set<int> s_set;
-            for(int& node : invalid_cycle) {
-                s_set.insert(node);
+                FullGraph::Node u = (*_graph)(source);
+                FullGraph::Node v = (*_graph)(sink);
+                int flow_value = ght.minCutValue(u, v);
+                ght.minCutMap(u, v, *cutmap);
+
+                if (flow_value < 2) {
+                    return false;
+                }
             }
+            return true;
+
+        }
+
+        void update_model_constrains(NodeBoolMap& cutmap) {
 
             vector<int> s_values;
             vector<int> not_s_values;
 
             for (int i = 0; i < _n; i++) {
-                const bool is_in = s_set.find(i) != s_set.end();
-
-                if (is_in) {
+                FullGraph::Node u = (*_graph)(i);
+                if (cutmap[u]) {
                     s_values.push_back(i);
                 } else {
                     not_s_values.push_back(i);
@@ -126,16 +103,19 @@ namespace ExactSMCP {
             GRBLinExpr expr = 0;
             for (int& i : s_values) {
                 for (int& j : not_s_values) {
-                    expr += _edge_vars[i][j];
+                    if (i < j)
+                        expr += _edge_vars[i][j];
+                    else
+                        expr += _edge_vars[j][i];
                 }
             }
-            addLazy(expr >= 2);
+            addLazy(expr >= 2.0);
 
         }
 
     };
 
-    void solve(int n, vector<pair<float, float>>& vertices, int** int_sol) {
+    void solve(int n, vector<pair<float, float>>& vertices, FullGraph& graph, int** int_sol) {
 
         GRBEnv* env = new GRBEnv();
         GRBModel model = GRBModel(*env);
@@ -172,10 +152,10 @@ namespace ExactSMCP {
             }
         }
         for (int i = 0; i < n; i++)
-            model.addConstr(expr_vec[i] >= 2, "deg2_" + itos(i));
+            model.addConstr(expr_vec[i] == 2, "deg2_" + itos(i));
 
         // set callback
-        FeasibleSolCallback cb = FeasibleSolCallback(edge_vars, n);
+        FeasibleSolCallback cb = FeasibleSolCallback(n, edge_vars, &graph);
         model.setCallback(&cb);
 
         double** sol = new double* [n];

@@ -21,6 +21,9 @@ int main(int argc, char* argv[]) {
 
     for (string& file : *files) {
 
+        // char* str = "../../../allInst/rg-016-q-1x1.0003.ccpdp";
+        // string new_file = str;
+
         int n = 0;
         vector<pair<float, float>> vertices;
         vertices.reserve(n);
@@ -61,15 +64,15 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        SurvivableNetwork::solve(n, *graph, *cost, sol);
-        sol = ApxSMCP::solve(n, sol, *graph, *cost);
+        // SurvivableNetwork::solve(n, *graph, *cost, sol);
+        // sol = ApxSMCP::solve(n, sol, *graph, *cost);
 
-        // TODO fix: file = ../../../allInst/rg-016-q-1x1.0003.ccpdp com vertice de grau impar!
-        // ExactSMCP::solve(n, vertices, sol);
+
+        ExactSMCP::solve(n, vertices, *graph, sol);
 
         print_matrix(n, sol);
 
-        // verify_solution(file, n, sol);
+        verify_solution(file, n, sol);
 
         delete graph;
         delete cost;
