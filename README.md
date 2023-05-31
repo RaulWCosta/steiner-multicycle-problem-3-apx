@@ -1,4 +1,4 @@
-# Steiner Multicycle PRoblem 3-APX
+# Steiner Multicycle Problem 3-APX
 
 Implementation of 3-approximation for the Steiner Multicycle Problem
 
