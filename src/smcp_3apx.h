@@ -14,37 +14,71 @@ using namespace lemon;
 namespace ApxSMCP {
 
 
-    void get_odd_degree_nodes(int n, int** graph, vector<int>* odd_vertices) {
+    void get_odd_degree_nodes(int n, int** sol, vector<int>* odd_vertices) {
+
+        vector<int> degrees = get_vertices_degrees(n, sol);
 
         int* nodes_degree = new int[n];
         // init vector values
         for (int i = 0; i < n; i++)
-            nodes_degree[i] = 0;
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-
-                nodes_degree[i] += graph[i][j];
-                nodes_degree[j] += graph[i][j];
-
-            }
-        }
-
-        for (int i = 0; i < n; i++)
-            if (nodes_degree[i] % 2)
+            if (degrees[i] % 2)
                 odd_vertices->push_back(i);
 
     }
 
-    // init_graph_adaptor()
-
-    // short_cutting()
 
     int** short_cutting(int n, int** sol) {
+        vector<int> vertices_to_short;
+        int vert, a, b;
         
-        vector<int> vertices_degrees;
-        vertices_degrees.reserve(n);
+        vector<int> vertices_degrees = get_vertices_degrees(n, sol);
+        for (int i = 0; i < n; i++)
+            if (vertices_degrees[i] > 2)
+                vertices_to_short.push_back(i);
 
+        while(vertices_to_short.size()) {
+
+            // vert = vertices_to_short.pop();
+
+            // vector<int> neighbors = get_neighboors(vert, sol);
+
+            // tie(a, b) = get_best_shortcut(n, vert, neighbors, sol);
+
+            sol[vert][a] -= 1;
+            sol[a][vert] -= 1;
+            sol[vert][b] -= 1;
+            sol[b][vert] -= 1;
+            sol[a][b] += 1;
+            sol[b][a] += 1;
+
+            vertices_degrees[vert] -= 2;
+
+            if (vertices_degrees[vert] > 2)
+                vertices_to_short.push_back(vert);
+
+            // float best_dist = numeric_limits<float>::max();
+            // int best_vert_a = -1;
+            // int best_vert_b = -1;
+
+            // for (&auto i : neighbors) {
+            //     for (&auto j : neighbors) {
+            //         if (i == j || sol[i][j])
+            //             continue;
+                    
+            //         if (sol[i][vert] - )
+            //     }
+            // }
+
+            
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (vertices_degrees[i] <= 2)
+                continue;
+            
+
+
+        }
 
         
         return sol;
@@ -95,7 +129,7 @@ namespace ApxSMCP {
 
         }
         print_matrix(n, sn_sol);
-        sn_sol = short_cutting(n, sn_sol);
+        // sn_sol = short_cutting(n, sn_sol);
 
         return sn_sol;
     }

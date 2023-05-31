@@ -156,14 +156,21 @@ void findDataFiles(string folder, vector<string> *files){
 
     }
 
-void verify_solution(string file_name, int n, int** sol) {
-    vector<int> vertices_degree(n, 0);
+
+vector<int> get_vertices_degrees(int n, int** sol) {
+    vector<int> degrees(n, 0);
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-            vertices_degree[i] += sol[i][j];
-            vertices_degree[j] += sol[i][j];
+            degrees[i] += sol[i][j];
+            degrees[j] += sol[i][j];
         }
     }
+    return degrees;
+}
+
+
+void verify_solution(string file_name, int n, int** sol) {
+    vector<int> vertices_degree = get_vertices_degrees(n, sol);
 
     for (int i = 0; i < vertices_degree.size(); i++) {
         if (vertices_degree[i] % 2) {
