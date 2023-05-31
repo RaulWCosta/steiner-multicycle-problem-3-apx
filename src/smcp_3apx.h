@@ -6,13 +6,15 @@
 
 #include <limits>
 
+#include "src/utils.h"
+
 using namespace std;
 using namespace lemon;
 
 namespace ApxSMCP {
 
 
-    vector<int>* get_odd_degree_nodes(int n, int** graph) {
+    void get_odd_degree_nodes(int n, int** graph, vector<int>* odd_vertices) {
 
         int* nodes_degree = new int[n];
         // init vector values
@@ -20,19 +22,18 @@ namespace ApxSMCP {
             nodes_degree[i] = 0;
 
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (graph[i][j]) {
-                    nodes_degree[i]++;
-                    nodes_degree[j]++;
-                }
+            for (int j = i + 1; j < n; j++) {
+
+                nodes_degree[i] += graph[i][j];
+                nodes_degree[j] += graph[i][j];
+
             }
         }
-        vector<int>* odd_vertices = new vector<int>;
+
         for (int i = 0; i < n; i++)
             if (nodes_degree[i] % 2)
                 odd_vertices->push_back(i);
-        
-        return odd_vertices;
+
     }
 
     // init_graph_adaptor()
@@ -51,12 +52,13 @@ namespace ApxSMCP {
 
     int** solve(int n, int** sn_sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
 
-        vector<int>* odd_vertices = get_odd_degree_nodes(n, sn_sol);
+        vector<int> odd_vertices;
+        get_odd_degree_nodes(n, sn_sol, &odd_vertices);
 
-        if (odd_vertices->size() > 0) {  
+        if (odd_vertices.size() > 0) {
 
             FullGraph::NodeMap<bool> filter(graph, false);
-            for (auto& i : *odd_vertices) {
+            for (auto& i : odd_vertices) {
                 FullGraph::Node u = graph(i);
                 filter.set(u, true);
             }
@@ -65,8 +67,8 @@ namespace ApxSMCP {
 
             FilterNodes<FullGraph>::EdgeMap<float>* inverted_cost = new FilterNodes<FullGraph>::EdgeMap<float>(subgraph);
 
-            for (auto& i : *odd_vertices) {
-                for (auto& j : *odd_vertices) {
+            for (auto& i : odd_vertices) {
+                for (auto& j : odd_vertices) {
                     FullGraph::Node u = graph(i);
                     FullGraph::Node v = graph(j);
                     if (i == j) {
@@ -81,18 +83,18 @@ namespace ApxSMCP {
             // TODO split init and start of algorithm for eficiency
             perf_match.run();
 
-            for (auto& i : *odd_vertices) {
-                for (auto& j : *odd_vertices) {
+            for (auto& i : odd_vertices) {
+                for (auto& j : odd_vertices) {
                     FullGraph::Node u = graph(i);
                     FullGraph::Node v = graph(j);
                     if (perf_match.matching(graph.edge(u, v))) {
-                        sn_sol[i][j] = 1;
+                        sn_sol[i][j] += 1;
                     }
                 }
             }
 
         }
-
+        print_matrix(n, sn_sol);
         sn_sol = short_cutting(n, sn_sol);
 
         return sn_sol;

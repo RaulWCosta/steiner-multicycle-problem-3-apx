@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
     for (string& file : *files) {
 
-        // char* str = "../../../allInst/rg-016-q-1x1.0003.ccpdp";
+        // char* str = "../../../allInst/m10Q10s555.tsp.ccpdp";
         // string new_file = str;
 
         int n = 0;
@@ -64,11 +64,11 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // SurvivableNetwork::solve(n, *graph, *cost, sol);
-        // sol = ApxSMCP::solve(n, sol, *graph, *cost);
+        SurvivableNetwork::solve(n, *graph, *cost, sol);
+        sol = ApxSMCP::solve(n, sol, *graph, *cost);
 
 
-        ExactSMCP::solve(n, vertices, *graph, sol);
+        // ExactSMCP::solve(n, vertices, *graph, sol);
 
         print_matrix(n, sol);
 
@@ -79,6 +79,7 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < n; i++)
             delete[] sol[i];
         delete[] sol;
+
     }
 
     delete files;
