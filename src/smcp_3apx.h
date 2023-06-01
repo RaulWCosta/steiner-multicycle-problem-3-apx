@@ -3,6 +3,7 @@
 #include <lemon/matching.h>
 #include <lemon/adaptors.h>
 #include <lemon/list_graph.h>
+#include <tuple>
 
 #include <limits>
 
@@ -26,11 +27,61 @@ namespace ApxSMCP {
 
     }
 
+    void get_neighboors(int n, int vert, int** sol, vector<int>* neighboors) {
+        neighboors->clear();
 
-    int** short_cutting(int n, int** sol) {
+        for (int i = 0; i < n; i++) {
+            if (i == vert)
+                continue;
+
+            if (sol[i][vert])
+                neighboors->push_back(i);
+        }
+    }
+
+    tuple<int, int> get_best_shortcut(
+        int n,
+        int vert,
+        vector<int>& neighbors,
+        int** sol,
+        FullGraph& graph,
+        FullGraph::EdgeMap<float>& cost
+    ) {
+
+        float best_dist = 0;
+        int best_vert_a = -1;
+        int best_vert_b = -1;
+        FullGraph::Node node_vert = graph(vert);
+
+        for (auto& i : neighbors) {
+            for (auto& j : neighbors) {
+                if (i == j || sol[i][j])
+                    continue;
+
+                FullGraph::Node node_i = graph(i);
+                FullGraph::Node node_j = graph(j);
+
+                float shortcut_gain = cost[graph.edge(node_i, node_vert)];
+                shortcut_gain += cost[graph.edge(node_vert, node_j)];
+                shortcut_gain -= cost[graph.edge(node_i, node_j)];
+
+
+                if (shortcut_gain > best_dist) {
+                    best_dist = shortcut_gain;
+                    best_vert_a = i;
+                    best_vert_b = j;
+                }
+            }
+        }
+
+        return make_tuple(best_vert_a, best_vert_b);
+    }
+
+    int** short_cutting(int n, int** sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
         vector<int> vertices_to_short;
         int vert, a, b;
-        
+        vector<int> neighbors;
+
         vector<int> vertices_degrees = get_vertices_degrees(n, sol);
         for (int i = 0; i < n; i++)
             if (vertices_degrees[i] > 2)
@@ -38,12 +89,17 @@ namespace ApxSMCP {
 
         while(vertices_to_short.size()) {
 
-            // vert = vertices_to_short.pop();
+            vert = vertices_to_short[vertices_to_short.size() - 1];
+            vertices_to_short.pop_back();
 
-            // vector<int> neighbors = get_neighboors(vert, sol);
+            get_neighboors(n, vert, sol, &neighbors);
 
-            // tie(a, b) = get_best_shortcut(n, vert, neighbors, sol);
+            tie(a, b) = get_best_shortcut(n, vert, neighbors, sol, graph, cost);
 
+            if (a == -1 || b == -1)
+                continue;
+
+            // update solution
             sol[vert][a] -= 1;
             sol[a][vert] -= 1;
             sol[vert][b] -= 1;
@@ -56,31 +112,8 @@ namespace ApxSMCP {
             if (vertices_degrees[vert] > 2)
                 vertices_to_short.push_back(vert);
 
-            // float best_dist = numeric_limits<float>::max();
-            // int best_vert_a = -1;
-            // int best_vert_b = -1;
-
-            // for (&auto i : neighbors) {
-            //     for (&auto j : neighbors) {
-            //         if (i == j || sol[i][j])
-            //             continue;
-                    
-            //         if (sol[i][vert] - )
-            //     }
-            // }
-
-            
         }
 
-        for (int i = 0; i < n; i++) {
-            if (vertices_degrees[i] <= 2)
-                continue;
-            
-
-
-        }
-
-        
         return sol;
     }
 
@@ -111,7 +144,7 @@ namespace ApxSMCP {
                     (*inverted_cost)[graph.edge(u, v)] = -cost[graph.edge(u, v)];
                 }
             }
-            // TODO ../../../allInst/m10Q10s555.tsp.ccpdp tem vertice de grau impar
+
             MaxWeightedPerfectMatching< FilterNodes<FullGraph>, FullGraph::EdgeMap<float> > perf_match(subgraph, *inverted_cost);
 
             // TODO split init and start of algorithm for eficiency
@@ -126,10 +159,13 @@ namespace ApxSMCP {
                     }
                 }
             }
-
         }
-        print_matrix(n, sn_sol);
-        // sn_sol = short_cutting(n, sn_sol);
+
+        // print_matrix(n, sn_sol);
+        cout << "before shortcutting = " << get_sol_val(n, sn_sol, graph, cost) << endl;
+        sn_sol = short_cutting(n, sn_sol, graph, cost); // TODO fix
+        cout << "after shortcutting = " << get_sol_val(n, sn_sol, graph, cost) << endl;
+        // print_matrix(n, sn_sol);
 
         return sn_sol;
     }
