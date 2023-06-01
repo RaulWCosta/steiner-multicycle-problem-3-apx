@@ -64,13 +64,22 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        ExactSMCP::solve(n, vertices, *graph, sol);
+        float exact = get_sol_val(n, sol, *graph, *cost);
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                sol[i][j] = 0;
+
         SurvivableNetwork::solve(n, *graph, *cost, sol);
+
+        cout << "file = " << file << endl;
+
         sol = ApxSMCP::solve(n, sol, *graph, *cost);
 
+        cout << "exact = " << exact << endl;
 
-        // ExactSMCP::solve(n, vertices, *graph, sol);
-
-        print_matrix(n, sol);
+        // print_matrix(n, sol);
 
         verify_solution(file, n, sol);
 

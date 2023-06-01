@@ -302,7 +302,7 @@ namespace SurvivableNetwork {
             // adiciona valores >= 0.5 no int_solution
             update_int_solution(n, lp_solution, int_solution, edge_vars, *model);
 
-            print_matrix(n, int_solution);
+            // print_matrix(n, int_solution);
 
             flag_valid_solution = is_valid_int_solution(n, int_solution);
 
