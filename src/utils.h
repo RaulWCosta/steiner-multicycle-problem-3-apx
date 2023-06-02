@@ -187,16 +187,14 @@ void verify_solution(string file_name, int n, int** sol) {
 
 }
 
-float get_sol_val(int n, int** sol, FullGraph& graph, FullGraph::EdgeMap<float>& cost) {
+float get_sol_val(int n, int** sol, float** edges_weights) {
 
     float total_cost = 0.0;
 
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-            FullGraph::Node u = graph(i);
-            FullGraph::Node v = graph(j);
-            
-            total_cost += cost[graph.edge(u, v)] * sol[i][j];
+
+            total_cost += sol[i][j] * edges_weights[i][j];
 
         }
     }

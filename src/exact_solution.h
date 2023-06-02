@@ -117,7 +117,7 @@ namespace ExactSMCP {
 
     };
 
-    void solve(int n, vector<pair<float, float>>& vertices, int** int_sol) {
+    int** solve(int n, float** edges_weights, int** int_sol) {
 
 
         for (int i = 0; i < n; i++)
@@ -131,12 +131,11 @@ namespace ExactSMCP {
             for (int j = 0; j < n; j++) {
                 FullGraph::Node u = (*graph)(i);
                 FullGraph::Node v = (*graph)(j);
-                float dist;
+
                 if (i == j) {
                     continue;
                 }
-                dist = vertices_distance(vertices[i], vertices[j]);
-                (*cost)[graph->edge(u, v)] = dist;
+                (*cost)[graph->edge(u, v)] = edges_weights[i][j];
             }
         }
 
@@ -154,8 +153,7 @@ namespace ExactSMCP {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= i; j++) {
-                float dist = vertices_distance(vertices[i], vertices[j]);
-                edge_vars[i][j] = model.addVar(0.0, 2.0, dist,
+                edge_vars[i][j] = model.addVar(0.0, 2.0, edges_weights[i][j],
                     GRB_INTEGER, "x_" + itos(i) + "_" + itos(j));
                 edge_vars[j][i] = edge_vars[i][j];
             }
@@ -202,6 +200,7 @@ namespace ExactSMCP {
 
         delete graph;
         delete cost;
+        return int_sol;
     }
 
 

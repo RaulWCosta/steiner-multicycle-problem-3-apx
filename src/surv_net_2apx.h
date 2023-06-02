@@ -2,8 +2,6 @@
 
 #include "gurobi_c++.h"
 
-// #include <lemon/full_graph.h>
-// #include <lemon/preflow.h>
 #include <lemon/gomory_hu.h>
 #include <lemon/concepts/maps.h>
 #include <lemon/list_graph.h>
@@ -222,22 +220,10 @@ namespace SurvivableNetwork {
 
         }
 
+        // print_matrix(n, curr_sol);
+
     }
 
-
-    bool is_valid_int_solution(int n, int** sol) {
-
-    vector<int> vertices_degree = get_vertices_degrees(n, sol);
-
-    for (int i = 0; i < vertices_degree.size(); i++) {
-        if (vertices_degree[i] % 2) {
-            return false;
-        }
-    }
-
-    // check if terminals are connected
-    return verify_terminals_connected(n, sol);
-    }
 
     void init_graph(int n, ListGraph* graph) {
         for (int i = 0; i < n; i++) {
@@ -262,34 +248,24 @@ namespace SurvivableNetwork {
         }
     }
 
-    void init_cost_map(int n, ListGraph& graph, vector<pair<float, float>>& vertices, ListGraph::EdgeMap<float>* cost) {
+    void init_cost_map(int n, ListGraph& graph, float** edges_weights, ListGraph::EdgeMap<float>* cost) {
         
         for (ListGraph::EdgeIt e(graph); e != INVALID; ++e) {
 
             int left = graph.id(graph.u(e));
             int right = graph.id(graph.v(e));
 
-            float dist = vertices_distance(vertices[left], vertices[right]);
-            (*cost)[e] = dist;
-
+            (*cost)[e] = edges_weights[left][right];
         }
 
     }
 
     // solve 2-apx
-    void solve(int n, vector<pair<float, float>>& vertices, int** int_solution) {
+    void solve(int n, ListGraph* graph, ListGraph::EdgeMap<float>* cost, int** int_solution) {
 
         for (int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 int_solution[i][j] = 0;
-
-        ListGraph* graph = new ListGraph();
-        graph->reserveNode(n);
-        graph->reserveEdge((int)(n*n/2));
-
-        init_graph(n, graph);
-        ListGraph::EdgeMap<float>* cost = new ListGraph::EdgeMap<float>(*graph);
-        init_cost_map(n, *graph, vertices, cost);
 
         bool flag_valid_solution = false;
 
@@ -312,7 +288,7 @@ namespace SurvivableNetwork {
             // adiciona valores >= 0.5 no int_solution
             round_up_relaxed_solution(n, *graph, *lp_sol, edge_vars, *model, int_solution);
 
-            flag_valid_solution = is_valid_int_solution(n, int_solution);
+            flag_valid_solution = verify_terminals_connected(n, int_solution);
 
         }
 
