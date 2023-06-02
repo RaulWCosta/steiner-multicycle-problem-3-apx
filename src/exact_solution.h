@@ -3,7 +3,7 @@
 #include "gurobi_c++.h"
 
 #include <lemon/full_graph.h>
-#include <lemon/preflow.h>
+#include <lemon/gomory_hu.h>
 #include <unordered_set>
 
 #include "src/utils.h"
@@ -117,7 +117,28 @@ namespace ExactSMCP {
 
     };
 
-    void solve(int n, vector<pair<float, float>>& vertices, FullGraph& graph, int** int_sol) {
+    void solve(int n, vector<pair<float, float>>& vertices, int** int_sol) {
+
+
+        for (int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                int_sol[i][j] = 0;
+
+        FullGraph* graph = new FullGraph(n);
+        FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                FullGraph::Node u = (*graph)(i);
+                FullGraph::Node v = (*graph)(j);
+                float dist;
+                if (i == j) {
+                    continue;
+                }
+                dist = vertices_distance(vertices[i], vertices[j]);
+                (*cost)[graph->edge(u, v)] = dist;
+            }
+        }
 
         GRBEnv* env = new GRBEnv();
         GRBModel model = GRBModel(*env);
@@ -157,7 +178,7 @@ namespace ExactSMCP {
             model.addConstr(expr_vec[i] == 2, "deg2_" + itos(i));
 
         // set callback
-        FeasibleSolCallback cb = FeasibleSolCallback(n, edge_vars, &graph);
+        FeasibleSolCallback cb = FeasibleSolCallback(n, edge_vars, graph);
         model.setCallback(&cb);
 
         double** sol = new double* [n];
@@ -178,6 +199,9 @@ namespace ExactSMCP {
         for (int i = 0; i < n; i++)
             delete[] sol[i];
         delete[] sol;
+
+        delete graph;
+        delete cost;
     }
 
 
