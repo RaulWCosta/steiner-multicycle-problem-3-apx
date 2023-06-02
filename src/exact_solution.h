@@ -11,6 +11,8 @@
 using namespace std;
 using namespace lemon;
 
+typedef FullGraph::NodeMap<bool> NodeBoolMap;
+
 namespace ExactSMCP {
 
 
