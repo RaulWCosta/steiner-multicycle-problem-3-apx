@@ -113,7 +113,7 @@ void findDataFiles(string folder, vector<string> *files){
 }
 
     bool verify_terminals_connected(int n, int** sol) {
-        int half_n = (int)(n/2);
+        int half_n = n >> 1;
         vector<int> stack;
 
         for (int s = 0; s < half_n; s++) {

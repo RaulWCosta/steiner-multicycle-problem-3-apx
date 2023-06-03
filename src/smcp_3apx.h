@@ -100,7 +100,7 @@ namespace ApxSMCP {
                     b = (*euclidean_path)[i+1];
                     if (a == b || b == curr_vert || curr_vert == a)
                         continue;
-                    print_matrix(n, sol);
+                    // print_matrix(n, sol);
                     if (!sol[a][curr_vert] || !sol[b][curr_vert])
                         continue;
 
@@ -143,7 +143,7 @@ namespace ApxSMCP {
 
         ListGraph* graph = new ListGraph();
         graph->reserveNode(n);
-        graph->reserveEdge((int)(n*n/2));
+        graph->reserveEdge(n >> 1);
 
         SurvivableNetwork::init_graph(n, graph);
         ListGraph::EdgeMap<float>* cost = new ListGraph::EdgeMap<float>(*graph);
@@ -188,10 +188,10 @@ namespace ApxSMCP {
         }
 
         // print_matrix(n, sn_sol);
-        // cout << "before shortcutting = " << get_sol_val(n, sn_sol, *graph, *cost) << endl;
-        // sn_sol = short_cutting(n, sn_sol, graph, cost); // TODO fix/
-        // cout << "after shortcutting = " << get_sol_val(n, sn_sol, *graph, *cost) << endl;
-        print_matrix(n, sn_sol);
+        cout << "before shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
+        sn_sol = short_cutting(n, sn_sol, graph, cost); // TODO fix/
+        cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
+        // print_matrix(n, sn_sol);
 
         delete cost;
         delete graph;

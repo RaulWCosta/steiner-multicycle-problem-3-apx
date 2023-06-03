@@ -71,7 +71,7 @@ namespace ExactSMCP {
             
             GomoryHu<FullGraph, FullGraph::EdgeMap<int>> ght(*_graph, *_cap);
             ght.run();
-            int half_n = (int)(_n / 2);
+            int half_n = _n >> 1;
             for (int source = 0; source < half_n; source++) {
                 int sink = source + half_n;
 

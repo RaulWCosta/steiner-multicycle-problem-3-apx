@@ -50,7 +50,7 @@ namespace SurvivableNetwork {
 
                 GomoryHu<ListGraph, ListGraph::EdgeMap<float>> ght(*_graph, *_cap);
                 ght.run();
-                int half_n = (int)(_n / 2);
+                int half_n = _n >> 1;
                 for (int source = 0; source < half_n; source++) {
                     int sink = source + half_n;
 
@@ -126,7 +126,7 @@ namespace SurvivableNetwork {
 
                 _model->optimize();
 
-                double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars, (int)(_n*_n/2));
+                double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars, _n >> 1);
 
                 for (ListGraph::EdgeIt e(*_graph); e != INVALID; ++e) {
                     (*_cap)[e] = sol[_graph->id(e)];
@@ -240,7 +240,7 @@ namespace SurvivableNetwork {
         }
 
         // add duplicated edges for terminals
-        int half_n = (int)(n / 2);
+        int half_n = n >> 1;
         for (int i = 0; i < half_n; i++) {
             ListGraph::Node u = graph->nodeFromId(i);
             ListGraph::Node v = graph->nodeFromId(i + half_n);
@@ -270,7 +270,7 @@ namespace SurvivableNetwork {
         bool flag_valid_solution = false;
 
         // cria modelo e adiciona restrições "base"
-        GRBVar* edge_vars = new GRBVar [ (int)(n*n/2) ];
+        GRBVar* edge_vars = new GRBVar [ n >> 1 ];
         GRBModel* model = init_gurobi_model(n, edge_vars, *graph, *cost);
 
         // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
