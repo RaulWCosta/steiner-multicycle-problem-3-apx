@@ -5,7 +5,7 @@
 #include <lemon/list_graph.h>
 #include <tuple>
 #include <unordered_set>
-
+#include <list>
 #include <limits>
 
 #include "src/surv_net_2apx.h"
@@ -29,7 +29,7 @@ namespace ApxSMCP {
 
     }
 
-    void calculate_sol_euclidean_path(int n, int init_vert, int** sol_cp, vector<int>* euclidean_path) {
+    void calculate_sol_euclidean_path(int n, int init_vert, int** sol, list<int>* euclidean_path) {
         vector<int>* stack = new vector<int>;
         stack->push_back(init_vert);
         while (stack->size()) {
@@ -40,11 +40,11 @@ namespace ApxSMCP {
             for (int i = 0; i < n; i++) {
                 if (i == curr_vert)
                     continue;
-                if (sol_cp[curr_vert][i]) {
+                if (sol[curr_vert][i]) {
                     // added_neighboor = true;
                     stack->push_back(i);
-                    sol_cp[curr_vert][i]--;
-                    sol_cp[i][curr_vert]--;
+                    sol[curr_vert][i]--;
+                    sol[i][curr_vert]--;
                 }
             }
             // if (!added_neighboor) {
@@ -54,59 +54,72 @@ namespace ApxSMCP {
             euclidean_path->push_back(curr_vert);
         }
         delete stack;
+        euclidean_path->push_back(init_vert); // close cycle
     }
 
-    void shortcut_euclidian_path_in_solution(int n, vector<int>& euclidean_path, int** sol) {
+    void add_euclidian_path_in_solution(int n, std::list<int>& euclidean_path, int** sol) {
+        int a, b;
+        auto it = euclidean_path.begin();
+        auto end_it = euclidean_path.end();
+        if (it != end_it) {
+            a = *it;
+            ++it;
+        }
+        for (; it != end_it; ++it) {
+            b = *it;
+
+            sol[a][b] += 1;
+            sol[b][a] += 1;
+
+            a = b;
+        }
+    }
+
+    void shortcut_euclidian_path(int n, int init_vert, list<int>* euclidean_path) {
         vector<bool> visited_in_path(n, false);
         // shortcut euclidean path
-        int a, b;
 
-        int curr_vert = euclidean_path[0];
+        int curr_vert = init_vert;
         visited_in_path[curr_vert] = true;
 
-        for (int i = 1; i < euclidean_path.size() - 1; i++) {
-            curr_vert = euclidean_path[i];
-            if (visited_in_path[curr_vert]) {
-                // execute shortcut
-                a = euclidean_path[i-1];
-                b = euclidean_path[i+1];
-                if (a == b || b == curr_vert || curr_vert == a)
-                    continue;
+        list<int>::iterator it = next(euclidean_path->begin());
+        list<int>::iterator end_it = prev(euclidean_path->end());
 
-                if (!sol[a][curr_vert] || !sol[b][curr_vert])
-                    continue; // this is an error case
+        vector<list<int>::iterator> to_remove_entries;
 
-                sol[a][curr_vert]--;
-                sol[curr_vert][a]--;
-                sol[b][curr_vert]--;
-                sol[curr_vert][b]--;
-                sol[b][a]++;
-                sol[a][b]++;
-
-
-                euclidean_path[i] = euclidean_path[i-1];
+        int count = 0;
+        for (; it != end_it; ++it) {
+            int i = *it;
+            if (visited_in_path[i]) {
+                to_remove_entries.push_back(it);
             }
-            visited_in_path[curr_vert] = true;
+            visited_in_path[i] = true;
+            count++;
         }
+
+        for (auto it = to_remove_entries.rbegin(); it != to_remove_entries.rend(); ++it) {
+            euclidean_path->erase(*it);
+        }
+
     }
 
     int** short_cutting(int n, int** sol) {
 
-        int **sol_cp = new int* [n];
-        for (int i = 0; i < n; i++)
-            sol_cp[i] = new int[n];
+        // int **sol_cp = new int* [n];
+        // for (int i = 0; i < n; i++)
+        //     sol_cp[i] = new int[n];
 
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                sol_cp[i][j] = sol[i][j];
-            }
-        }
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         sol_cp[i][j] = sol[i][j];
+        //     }
+        // }
 
         // get any initial vertex
         int curr_vert = 0;
 
-        vector<int>* euclidean_path = new vector<int>;
+        list<int>* euclidean_path = new list<int>;
 
         vector<bool> visited(n, false);
         visited[curr_vert] = true;
@@ -116,16 +129,23 @@ namespace ApxSMCP {
 
             euclidean_path->clear();
 
-            calculate_sol_euclidean_path(n, curr_vert, sol_cp, euclidean_path);
+            calculate_sol_euclidean_path(n, curr_vert, sol, euclidean_path);
 
+            shortcut_euclidian_path(n, curr_vert, euclidean_path);
             // cout << "copy!" << endl;
             // print_matrix(n, sol_cp);
 
-            shortcut_euclidian_path_in_solution(n, *euclidean_path, sol);
+            add_euclidian_path_in_solution(n, *euclidean_path, sol);
 
-            // update visited node to search next componenet
-            for (int i = 0; i < euclidean_path->size(); i++)
-                visited[(*euclidean_path)[i]] = true;
+            // // update visited node to search next componenet
+            // for (int i = 0; i < euclidean_path->size(); i++)
+            //     visited[(*euclidean_path)[i]] = true;
+
+
+            for (auto it = euclidean_path->begin(); it != euclidean_path->end(); ++it) {
+                int i = *it;
+                visited[i] = true;
+            }
 
             curr_vert = -1;
             for (int i = 0; i < n; i++) {
@@ -138,9 +158,9 @@ namespace ApxSMCP {
 
 
         delete euclidean_path;
-        for (int i = 0; i < n; i++)
-            delete[] sol_cp[i];
-        delete[] sol_cp;
+        // for (int i = 0; i < n; i++)
+        //     delete[] sol_cp[i];
+        // delete[] sol_cp;
 
         return sol;
     }
@@ -201,23 +221,23 @@ namespace ApxSMCP {
         verify_solution("file", n, sn_sol);
 
         cout << "before shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
-        print_matrix(n, sn_sol);
+        // print_matrix(n, sn_sol);
         sn_sol = short_cutting(n, sn_sol); // TODO fix/
         cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
-        print_matrix(n, sn_sol);
+        // print_matrix(n, sn_sol);
 
         // check shortcut
-        for (int i = 0; i < n; i++) {
-            int acc = 0;
-            for (int j = 0; j < n; j++) {
-                acc += sn_sol[i][j];
-                if (sn_sol[i][j] > 2)
-                    cout << "error pior" << endl;
-            }
-            if (acc > 2) {
-                cout << "error!" << endl;
-            }
-        }
+        // for (int i = 0; i < n; i++) {
+        //     int acc = 0;
+        //     for (int j = 0; j < n; j++) {
+        //         acc += sn_sol[i][j];
+        //         if (sn_sol[i][j] > 2)
+        //             cout << "error pior" << endl;
+        //     }
+        //     if (acc > 2) {
+        //         cout << "error!" << endl;
+        //     }
+        // }
 
         delete cost;
         delete graph;
