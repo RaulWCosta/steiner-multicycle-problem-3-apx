@@ -79,46 +79,6 @@ namespace SurvivableNetwork {
 
     private:
 
-        // bool is_valid_relaxed_solution(EdgeBoolMap* cutmap) {
-            
-
-
-        // }
-
-        // void update_model_constrains(EdgeBoolMap& cutmap) {
-
-        //     vector<int> s_values;
-        //     vector<int> not_s_values;
-
-        //     for (int i = 0; i < _n; i++) {
-        //         ListGraph::Node u = _graph->nodeFromId(i);
-        //         if (cutmap[u]) {
-        //             s_values.push_back(i);
-        //         } else {
-        //             not_s_values.push_back(i);
-        //         }
-        //     }
-
-        //     GRBLinExpr expr = 0;
-        //     for (int& i : s_values) {
-        //         for (int& j : not_s_values) {
-                    
-        //             ListGraph::Node a = _graph->nodeFromId(i);
-        //             ListGraph::Node b = _graph->nodeFromId(j);
-
-        //             ListGraph::Edge e1 = _graph->edge(a, b);
-        //             ListGraph::Edge e2 = _graph->edge(b, a);
-
-        //             if (e1 != INVALID)
-        //                 expr += _edge_vars[_graph->id(e1)];
-        //             if (e2 != INVALID)
-        //                 expr += _edge_vars[_graph->id(e2)];
-        //         }
-        //     }
-        //     _model->addConstr(expr >= 2.0);
-
-        // }
-
         // run optimize and update cap for maxflow check
         void lp_solver_run() {
 
@@ -126,7 +86,7 @@ namespace SurvivableNetwork {
 
                 _model->optimize();
 
-                double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars, _n >> 1);
+                double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars, (_n * _n) >> 1);
 
                 for (ListGraph::EdgeIt e(*_graph); e != INVALID; ++e) {
                     (*_cap)[e] = sol[_graph->id(e)];
@@ -270,7 +230,7 @@ namespace SurvivableNetwork {
         bool flag_valid_solution = false;
 
         // cria modelo e adiciona restrições "base"
-        GRBVar* edge_vars = new GRBVar [ n >> 1 ];
+        GRBVar* edge_vars = new GRBVar [ (n * n) >> 1 ];
         GRBModel* model = init_gurobi_model(n, edge_vars, *graph, *cost);
 
         // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which

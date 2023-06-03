@@ -20,14 +20,14 @@ int main(int argc, char* argv[]) {
 
     for (string& file : *files) {
 
-        // char* str = "../../../allInst/m10Q10s555.tsp.ccpdp";
-        // string new_file = str;
+        char* str = "../../../allInst/m10Q10s555.tsp.ccpdp";
+        string new_file = str;
 
         int n = 0;
         vector<pair<float, float>> vertices;
         vertices.reserve(n);
 
-        read_instance(file, &n, &vertices);
+        read_instance(new_file, &n, &vertices);
 
         // init edges_weights matrix
         float** edges_weights = new float* [n];
@@ -46,17 +46,18 @@ int main(int argc, char* argv[]) {
         sol = ExactSMCP::solve(n, edges_weights, sol);
         verify_solution(file, n, sol);
         float exact = get_sol_val(n, sol, edges_weights);
+        print_matrix(n, sol);
 
         sol = ApxSMCP::solve(n, edges_weights, sol);
         verify_solution(file, n, sol);
         cout << "3apx = " << get_sol_val(n, sol, edges_weights) << endl;
         cout << "exact = " << exact << endl;
-
+        cout << "file = " << file << endl;
 
         for (int i = 0; i < n; i++)
             delete[] sol[i];
         delete[] sol;
-
+        return 0;
     }
 
     delete files;
