@@ -3,6 +3,7 @@
 #include <utility>
 #include <fstream>
 #include <string>
+#include <chrono>
 
 #include "src/utils.h"
 #include "src/smcp_3apx.h"
@@ -17,6 +18,14 @@ int main(int argc, char* argv[]) {
     string dir = "../../../allInst";
     findDataFiles(dir, files);
 
+    std::ofstream result_file("../../../_result.csv", std::ios::app);
+    if (result_file.is_open()) {
+        result_file << "instance;exact_val;exact_time;apx_val;apx_time" << endl;
+        result_file.close();
+    } else {
+        std::cerr << "Error: Unable to save result." << std::endl;
+        exit(1);
+    }
 
     for (string& file : *files) {
 
@@ -42,21 +51,45 @@ int main(int argc, char* argv[]) {
         for (int i = 0; i < n; i++)
             sol[i] = new int[n];
 
-
+        auto start_time = std::chrono::high_resolution_clock::now();
         sol = ExactSMCP::solve(n, edges_weights, sol);
-        verify_solution(file, n, sol);
-        float exact = get_sol_val(n, sol, edges_weights);
-        print_matrix(n, sol);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto exact_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
+        // verify_solution(file, n, sol);
+        float exact = get_sol_val(n, sol, edges_weights);
+
+        // print_matrix(n, sol);
+
+        start_time = std::chrono::high_resolution_clock::now();
         sol = ApxSMCP::solve(n, edges_weights, sol);
-        verify_solution(file, n, sol);
-        cout << "3apx = " << get_sol_val(n, sol, edges_weights) << endl;
-        cout << "exact = " << exact << endl;
-        cout << "file = " << file << endl;
+        end_time = std::chrono::high_resolution_clock::now();
+        auto apx_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+
+        // verify_solution(file, n, sol);
+        float apx = get_sol_val(n, sol, edges_weights);
+        // cout << "3apx = " << apx << endl;
+        // cout << "exact = " << exact << endl;
+        // cout << "file = " << file << endl;
+
+
+        std::ofstream result_file("../../../_result.csv", std::ios::app);
+        if (result_file.is_open()) {
+            // result_file << "instance;exact_val;exact_time;apx_val;apx_time" << endl;
+            result_file << file << ";" << exact << ";" << exact_time << ";" << apx << ";" << apx_time << endl;
+            result_file.close();
+        } else {
+            std::cerr << "Error: Unable to save result." << std::endl;
+            exit(1);
+        }
 
         for (int i = 0; i < n; i++)
             delete[] sol[i];
         delete[] sol;
+
+        for (int i = 0; i < n; i++)
+            delete[] edges_weights[i];
+        delete[] edges_weights;
     }
 
     delete files;

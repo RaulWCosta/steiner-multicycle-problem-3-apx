@@ -140,6 +140,8 @@ namespace ExactSMCP {
         }
 
         GRBEnv* env = new GRBEnv();
+        env->set(GRB_IntParam_LogToConsole, 0);
+
         GRBModel model = GRBModel(*env);
 
         GRBVar** edge_vars = new GRBVar * [n];

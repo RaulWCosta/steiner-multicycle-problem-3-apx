@@ -18,7 +18,6 @@ typedef ListGraph::EdgeMap<bool> EdgeBoolMap;
 
 namespace SurvivableNetwork {
 
-    // TODO delete this class
     class LPSolver {
 
     public:
@@ -29,26 +28,23 @@ namespace SurvivableNetwork {
         ListGraph* _graph;
         ListGraph::EdgeMap<float>* _cap = nullptr;
 
-        LPSolver(int n, GRBModel* model, GRBVar* edge_vars, ListGraph* graph, ListGraph::EdgeMap<float>* cap)
-            : _n(n), _model(model), _edge_vars(edge_vars), _graph(graph), _cap(cap)
+        LPSolver(int n, GRBModel* model, GRBVar* edge_vars, ListGraph* graph)
+            : _n(n), _model(model), _edge_vars(edge_vars), _graph(graph)
         {
         }
 
 
-        ListGraph::EdgeMap<float>* solve() {
+        void solve(ListGraph::EdgeMap<float>* cap) {
 
             bool valid_relaxed_solution = false;
-
 
             while(!valid_relaxed_solution) {
                 valid_relaxed_solution = true;
 
-                // update _cap inplace
-                lp_solver_run();
+                // update cap inplace
+                lp_solver_run(cap);
 
-                // EdgeBoolMap cutmap(*_graph);
-
-                GomoryHu<ListGraph, ListGraph::EdgeMap<float>> ght(*_graph, *_cap);
+                GomoryHu<ListGraph, ListGraph::EdgeMap<float>> ght(*_graph, *cap);
                 ght.run();
                 int half_n = _n >> 1;
                 for (int source = 0; source < half_n; source++) {
@@ -57,7 +53,6 @@ namespace SurvivableNetwork {
                     ListGraph::Node u = _graph->nodeFromId(source);
                     ListGraph::Node v = _graph->nodeFromId(sink);
                     float flow_value = ght.minCutValue(u, v);
-                    // ght.minCutMap(u, v, cutmap);
 
                     if (flow_value > 1.999) { // rounding error
                         continue;
@@ -74,13 +69,12 @@ namespace SurvivableNetwork {
 
             }
 
-            return _cap;
         }
 
     private:
 
         // run optimize and update cap for maxflow check
-        void lp_solver_run() {
+        void lp_solver_run(ListGraph::EdgeMap<float>* cap) {
 
             try {
 
@@ -89,7 +83,7 @@ namespace SurvivableNetwork {
                 double* sol = _model->get(GRB_DoubleAttr_X, _edge_vars, (_n * _n) >> 1);
 
                 for (ListGraph::EdgeIt e(*_graph); e != INVALID; ++e) {
-                    (*_cap)[e] = sol[_graph->id(e)];
+                    (*cap)[e] = sol[_graph->id(e)];
                 }
 
             }
@@ -114,6 +108,7 @@ namespace SurvivableNetwork {
         try {
 
             env = new GRBEnv();
+            env->set(GRB_IntParam_LogToConsole, 0);
             GRBModel* model = new GRBModel(*env);
 
             // Create decision variables, only upper right
@@ -237,13 +232,13 @@ namespace SurvivableNetwork {
         //  is not connected to it's pair
         ListGraph::EdgeMap<float>* lp_sol = new ListGraph::EdgeMap<float>(*graph);
 
-        LPSolver lp_solver = LPSolver(n, model, edge_vars, graph, lp_sol);
+        LPSolver lp_solver = LPSolver(n, model, edge_vars, graph);
 
         // // enquanto modelo nao retorna solucao viavel
         while(!flag_valid_solution) {
 
             // rodar LP até solução viável do relaxado
-            lp_sol = lp_solver.solve();
+            lp_solver.solve(lp_sol);
 
             // adiciona valores >= 0.5 no int_solution
             round_up_relaxed_solution(n, *graph, *lp_sol, edge_vars, *model, int_solution);

@@ -218,26 +218,12 @@ namespace ApxSMCP {
         }
 
         // print_matrix(n, sn_sol);
-        verify_solution("file", n, sn_sol);
+        // verify_solution("file", n, sn_sol);
 
-        cout << "before shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
+        // cout << "before shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
         // print_matrix(n, sn_sol);
-        sn_sol = short_cutting(n, sn_sol); // TODO fix/
-        cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
-        // print_matrix(n, sn_sol);
-
-        // check shortcut
-        // for (int i = 0; i < n; i++) {
-        //     int acc = 0;
-        //     for (int j = 0; j < n; j++) {
-        //         acc += sn_sol[i][j];
-        //         if (sn_sol[i][j] > 2)
-        //             cout << "error pior" << endl;
-        //     }
-        //     if (acc > 2) {
-        //         cout << "error!" << endl;
-        //     }
-        // }
+        sn_sol = short_cutting(n, sn_sol);
+        // cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
 
         delete cost;
         delete graph;
