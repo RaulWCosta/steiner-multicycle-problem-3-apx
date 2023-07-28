@@ -15,7 +15,7 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
     vector<string>* files = new vector<string>;
-    string dir = "../../../allInst";
+    string dir = "../../../testInst";
     findDataFiles(dir, files);
 
     std::ofstream result_file("../../../_result.csv", std::ios::app);
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     for (string& file : *files) {
 
-        // char* str = "../../../allInst/m10Q10s555.tsp.ccpdp";
+        // char* str = "../../../testInst/m10Q10s555.tsp.ccpdp";
         // string new_file = str;
 
         int n = 0;

@@ -35,7 +35,7 @@ float vertices_distance(const std::pair<float, float>& a, const std::pair<float,
 
 
 void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* vertices) {
-    // string circuitfilename = "../../../allInst/toy.ccpdp";
+    // string circuitfilename = "../../../testInst/toy.ccpdp";
     ifstream in;
     string linha, substring, name;
     int nnodes=0;

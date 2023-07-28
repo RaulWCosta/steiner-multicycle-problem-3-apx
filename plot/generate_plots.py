@@ -34,7 +34,7 @@ def plot_dataframe(df):
 def separate_instances_types(df):
 
     # Boolean index to select rows that meet the condition
-    condition = df['instance'].str.startswith("../../../allInst/m")
+    condition = df['instance'].str.startswith("../../../testInst/m")
 
     # Split the DataFrame into two new DataFrames based on the condition
     df_starting_with_m = df[condition]
