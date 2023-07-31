@@ -247,6 +247,10 @@ namespace SurvivableNetwork {
 
         }
 
+        delete edge_vars;
+        delete lp_sol;
+        delete model;
+
     }
 
 }

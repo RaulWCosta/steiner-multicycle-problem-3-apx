@@ -31,6 +31,10 @@ namespace ExactSMCP {
             _cap = new FullGraph::EdgeMap<int>(*_graph);
         }
 
+        ~FeasibleSolCallback() {
+            delete _cap;
+        }
+
     protected:
         void callback() {
             try {
@@ -119,13 +123,18 @@ namespace ExactSMCP {
 
     int** solve(int n, float** edges_weights, int** int_sol) {
 
+        FullGraph* graph = new FullGraph(n);
+        FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
+
+        GRBEnv* env = new GRBEnv();
+        GRBVar** edge_vars = new GRBVar * [n];
+        for (int i = 0; i < n; i++)
+            edge_vars[i] = new GRBVar[n];
+
 
         for (int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 int_sol[i][j] = 0;
-
-        FullGraph* graph = new FullGraph(n);
-        FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -139,14 +148,9 @@ namespace ExactSMCP {
             }
         }
 
-        GRBEnv* env = new GRBEnv();
         env->set(GRB_IntParam_LogToConsole, 0);
 
         GRBModel model = GRBModel(*env);
-
-        GRBVar** edge_vars = new GRBVar * [n];
-        for (int i = 0; i < n; i++)
-            edge_vars[i] = new GRBVar[n];
 
         // Must set LazyConstraints parameter when using lazy constraints
         model.set(GRB_IntParam_LazyConstraints, 1);
@@ -200,8 +204,14 @@ namespace ExactSMCP {
             delete[] sol[i];
         delete[] sol;
 
+        for (int i = 0; i < n; i++)
+            delete[] edge_vars[i];
+        delete[] edge_vars;
+
+        delete env;
         delete graph;
         delete cost;
+
         return int_sol;
     }
 

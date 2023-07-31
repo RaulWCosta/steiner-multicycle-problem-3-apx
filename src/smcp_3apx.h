@@ -21,7 +21,6 @@ namespace ApxSMCP {
 
         vector<int> degrees = get_vertices_degrees(n, sol);
 
-        int* nodes_degree = new int[n];
         // init vector values
         for (int i = 0; i < n; i++)
             if (degrees[i] % 2)
@@ -29,8 +28,8 @@ namespace ApxSMCP {
 
     }
 
-    void calculate_sol_euclidean_path(int n, int init_vert, int** sol, list<int>* euclidean_path) {
-        vector<int>* stack = new vector<int>;
+    void calculate_sol_euclidean_path(int n, int init_vert, int** sol, vector<int>* stack, list<int>* euclidean_path) {
+
         stack->push_back(init_vert);
         while (stack->size()) {
             int curr_vert = (*stack)[stack->size() - 1];
@@ -53,7 +52,7 @@ namespace ApxSMCP {
 
             euclidean_path->push_back(curr_vert);
         }
-        delete stack;
+
         euclidean_path->push_back(init_vert); // close cycle
     }
 
@@ -105,17 +104,6 @@ namespace ApxSMCP {
 
     int** short_cutting(int n, int** sol) {
 
-        // int **sol_cp = new int* [n];
-        // for (int i = 0; i < n; i++)
-        //     sol_cp[i] = new int[n];
-
-
-        // for (int i = 0; i < n; i++) {
-        //     for (int j = 0; j < n; j++) {
-        //         sol_cp[i][j] = sol[i][j];
-        //     }
-        // }
-
         // get any initial vertex
         int curr_vert = 0;
 
@@ -124,23 +112,19 @@ namespace ApxSMCP {
         vector<bool> visited(n, false);
         visited[curr_vert] = true;
 
+        vector<int>* stack = new vector<int>;
+
         // for each component
         while (curr_vert != -1) {
 
+            stack->clear();
             euclidean_path->clear();
 
-            calculate_sol_euclidean_path(n, curr_vert, sol, euclidean_path);
+            calculate_sol_euclidean_path(n, curr_vert, sol, stack, euclidean_path);
 
             shortcut_euclidian_path(n, curr_vert, euclidean_path);
-            // cout << "copy!" << endl;
-            // print_matrix(n, sol_cp);
 
             add_euclidian_path_in_solution(n, *euclidean_path, sol);
-
-            // // update visited node to search next componenet
-            // for (int i = 0; i < euclidean_path->size(); i++)
-            //     visited[(*euclidean_path)[i]] = true;
-
 
             for (auto it = euclidean_path->begin(); it != euclidean_path->end(); ++it) {
                 int i = *it;
@@ -156,11 +140,8 @@ namespace ApxSMCP {
             }
         }
 
-
+        delete stack;
         delete euclidean_path;
-        // for (int i = 0; i < n; i++)
-        //     delete[] sol_cp[i];
-        // delete[] sol_cp;
 
         return sol;
     }
@@ -214,6 +195,8 @@ namespace ApxSMCP {
                     sn_sol[right][left] += 1;
                 }
             }
+
+            delete inverted_cost;
 
         }
 
