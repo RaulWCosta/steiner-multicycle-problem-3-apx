@@ -49,9 +49,9 @@ def generate_table_row(input_df, classes="m-PDTSP"):
     df["num Inst"] = input_df.shape[0]
     df["GAP (\%)"] = (((df["apx_val"] / df["exact_val"]) - 1) * 100).round(2)
     df["APX time (s)"] = (df["apx_time"] / 1000).round(2)
-    df["MILP time (s)"] = (df["exact_time"] / 1000).round(2)
+    df["exact solver time (s)"] = (df["exact_time"] / 1000).round(2)
 
-    return df[["Classes","num Inst", "GAP (\%)", "APX time (s)","MILP time (s)"]]
+    return df[["Classes","num Inst", "GAP (\%)", "APX time (s)","exact solver time (s)"]]
 
 def extract_type_2_rows(df_type_2, filter_str, filter_include: bool = True):
     
