@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     std::ofstream result_file("../../../_result.csv", std::ios::app);
     if (result_file.is_open()) {
-        result_file << "instance;exact_val;exact_time;apx_val;apx_time" << endl;
+        result_file << "instance;exact_val;exact_time;apx_val;apx_time;num_vertices" << endl;
         result_file.close();
     } else {
         std::cerr << "Error: Unable to save result." << std::endl;
@@ -34,7 +34,6 @@ int main(int argc, char* argv[]) {
 
         int n = 0;
         vector<pair<float, float>> vertices;
-        vertices.reserve(n);
 
         read_instance(file, &n, &vertices);
 
@@ -52,12 +51,12 @@ int main(int argc, char* argv[]) {
             sol[i] = new int[n];
 
         auto start_time = std::chrono::high_resolution_clock::now();
-        sol = ExactSMCP::solve(n, edges_weights, sol);
+        //sol = ExactSMCP::solve(n, edges_weights, sol);
         auto end_time = std::chrono::high_resolution_clock::now();
         auto exact_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-        // verify_solution(file, n, sol);
-        float exact = get_sol_val(n, sol, edges_weights);
+        //verify_solution(file, n, sol);
+        float exact = 0.0;//get_sol_val(n, sol, edges_weights);
 
         // print_matrix(n, sol);
 
@@ -66,17 +65,12 @@ int main(int argc, char* argv[]) {
         end_time = std::chrono::high_resolution_clock::now();
         auto apx_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-        // verify_solution(file, n, sol);
+        verify_solution(file, n, sol);
         float apx = get_sol_val(n, sol, edges_weights);
-        // cout << "3apx = " << apx << endl;
-        // cout << "exact = " << exact << endl;
-        // cout << "file = " << file << endl;
-
 
         std::ofstream result_file("../../../_result.csv", std::ios::app);
         if (result_file.is_open()) {
-            // result_file << "instance;exact_val;exact_time;apx_val;apx_time" << endl;
-            result_file << file << ";" << exact << ";" << exact_time << ";" << apx << ";" << apx_time << endl;
+            result_file << file << ";" << exact << ";" << exact_time << ";" << apx << ";" << apx_time << ";" << n << endl;
             result_file.close();
         } else {
             std::cerr << "Error: Unable to save result." << std::endl;
@@ -95,12 +89,3 @@ int main(int argc, char* argv[]) {
     delete files;
 
 }
-
-// #include "src/tsp.h"
-
-// using namespace std;
-
-// int main(int argc, char* argv[]) {
-//     solve();
-//     return 0;
-// }
