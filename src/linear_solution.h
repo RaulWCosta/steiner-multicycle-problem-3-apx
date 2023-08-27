@@ -13,7 +13,7 @@ using namespace lemon;
 
 typedef FullGraph::NodeMap<bool> NodeBoolMap;
 
-namespace ExactSMCP {
+namespace LinearSMCP {
 
 
     class FeasibleSolCallback : public GRBCallback
@@ -22,12 +22,12 @@ namespace ExactSMCP {
         GRBVar** _edge_vars;
         int _n;
         FullGraph* _graph = NULL;
-        FullGraph::EdgeMap<int>* _cap = NULL;
+        FullGraph::EdgeMap<double>* _cap = NULL;
 
         FeasibleSolCallback(int n, GRBVar** vars, FullGraph* graph)
             : _edge_vars(vars), _n(n), _graph(graph)
         {
-            _cap = new FullGraph::EdgeMap<int>(*_graph);
+            _cap = new FullGraph::EdgeMap<double>(*_graph);
         }
 
         ~FeasibleSolCallback() {
@@ -47,7 +47,7 @@ namespace ExactSMCP {
                         for (int j = i + 1; j < _n; j++) {
                             FullGraph::Node u = (*_graph)(i);
                             FullGraph::Node v = (*_graph)(j);
-                            (*_cap)[_graph->edge(u, v)] = (int)(tmp_solution[j] + 0.01);
+                            (*_cap)[_graph->edge(u, v)] = tmp_solution[j];
                         }
                     }
 
@@ -72,7 +72,7 @@ namespace ExactSMCP {
 
         bool is_valid_solution(NodeBoolMap* cutmap) {
             
-            GomoryHu<FullGraph, FullGraph::EdgeMap<int>> ght(*_graph, *_cap);
+            GomoryHu<FullGraph, FullGraph::EdgeMap<double>> ght(*_graph, *_cap);
             ght.run();
             int half_n = _n >> 1;
             for (int source = 0; source < half_n; source++) {
@@ -80,10 +80,10 @@ namespace ExactSMCP {
 
                 FullGraph::Node u = (*_graph)(source);
                 FullGraph::Node v = (*_graph)(sink);
-                int flow_value = ght.minCutValue(u, v);
+                double flow_value = ght.minCutValue(u, v);
                 ght.minCutMap(u, v, *cutmap);
 
-                if (flow_value < 2) {
+                if (flow_value < 2.0) {
                     return false;
                 }
             }
@@ -120,7 +120,7 @@ namespace ExactSMCP {
 
     };
 
-    int** solve(int n, float** edges_weights, int** int_sol) {
+    double** solve(int n, float** edges_weights, double** sol) {
 
         FullGraph* graph = new FullGraph(n);
         FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
@@ -133,7 +133,7 @@ namespace ExactSMCP {
 
         for (int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
-                int_sol[i][j] = 0;
+                sol[i][j] = 0.0f;
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -160,7 +160,7 @@ namespace ExactSMCP {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j <= i; j++) {
                 edge_vars[i][j] = model.addVar(0.0, 2.0, edges_weights[i][j],
-                    GRB_INTEGER, "x_" + itos(i) + "_" + itos(j));
+                    GRB_CONTINUOUS, "x_" + itos(i) + "_" + itos(j));
                 edge_vars[j][i] = edge_vars[i][j];
             }
         }
@@ -179,30 +179,30 @@ namespace ExactSMCP {
             }
         }
         for (int i = 0; i < n; i++)
-            model.addConstr(expr_vec[i] == 2, "deg2_" + itos(i));
+            model.addConstr(expr_vec[i] == 2.0, "deg2_" + itos(i));
 
         // set callback
         FeasibleSolCallback cb = FeasibleSolCallback(n, edge_vars, graph);
         model.setCallback(&cb);
 
-        double** sol = new double* [n];
+        double** tmp_sol = new double* [n];
 
         model.optimize();
 
         if (model.get(GRB_IntAttr_SolCount) > 0) {
             for (int i = 0; i < n; i++)
-                sol[i] = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
+                tmp_sol[i] = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
         }
 
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
-                int_sol[i][j] = (int)(sol[i][j] + 0.001);
+                sol[i][j] = tmp_sol[i][j];
 
         // print_matrix(n, int_sol);
 
         for (int i = 0; i < n; i++)
-            delete[] sol[i];
-        delete[] sol;
+            delete[] tmp_sol[i];
+        delete[] tmp_sol;
 
         for (int i = 0; i < n; i++)
             delete[] edge_vars[i];
@@ -212,7 +212,7 @@ namespace ExactSMCP {
         delete graph;
         delete cost;
 
-        return int_sol;
+        return sol;
     }
 
 

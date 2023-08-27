@@ -109,6 +109,8 @@ namespace SurvivableNetwork {
 
             env = new GRBEnv();
             env->set(GRB_IntParam_LogToConsole, 0);
+            env->set(GRB_IntParam_Seed, 0);
+
             GRBModel* model = new GRBModel(*env);
 
             // Create decision variables, only upper right
