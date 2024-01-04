@@ -120,15 +120,15 @@ namespace LinearSMCP {
 
     };
 
-    double** solve(int n, float** edges_weights, double** sol) {
-
-        FullGraph* graph = new FullGraph(n);
-        FullGraph::EdgeMap<float>* cost = new FullGraph::EdgeMap<float>(*graph);
-
-        GRBEnv* env = new GRBEnv();
-        GRBVar** edge_vars = new GRBVar * [n];
-        for (int i = 0; i < n; i++)
-            edge_vars[i] = new GRBVar[n];
+    double** solve(
+        int n,
+        float** edges_weights,
+        FullGraph* graph,
+        FullGraph::EdgeMap<float>* cost,
+        GRBEnv* env,
+        GRBVar** edge_vars,
+        double** sol
+    ) {
 
 
         for (int i = 0; i < n; i++)
@@ -185,32 +185,18 @@ namespace LinearSMCP {
         FeasibleSolCallback cb = FeasibleSolCallback(n, edge_vars, graph);
         model.setCallback(&cb);
 
-        double** tmp_sol = new double* [n];
+        double *tmp_sol;
 
         model.optimize();
 
         if (model.get(GRB_IntAttr_SolCount) > 0) {
-            for (int i = 0; i < n; i++)
-                tmp_sol[i] = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
+            for (int i = 0; i < n; i++) {
+                tmp_sol = model.get(GRB_DoubleAttr_X, edge_vars[i], n);
+                for (int j = 0; j < n; j++) {
+                    sol[i][j] = tmp_sol[j];
+                }
+            }
         }
-
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                sol[i][j] = tmp_sol[i][j];
-
-        // print_matrix(n, int_sol);
-
-        for (int i = 0; i < n; i++)
-            delete[] tmp_sol[i];
-        delete[] tmp_sol;
-
-        for (int i = 0; i < n; i++)
-            delete[] edge_vars[i];
-        delete[] edge_vars;
-
-        delete env;
-        delete graph;
-        delete cost;
 
         return sol;
     }

@@ -79,8 +79,8 @@ void read_instance(string& circuitfilename, int* n, vector<pair<float, float>>* 
 
     int indice;
     float x, y;
-    
 
+    vertices->reserve(nnodes);
     for (int i = 0; i < nnodes && !in.eof(); i++) {
         getline(in, linha);
         sscanf_s(linha.c_str(), "%d\t%f\t%f", &indice, &x, &y);
@@ -170,19 +170,19 @@ vector<int> get_vertices_degrees(int n, int** sol) {
 }
 
 
-void verify_solution(string file_name, int n, int** sol) {
+void verify_solution(int n, int** sol) {
     vector<int> vertices_degree = get_vertices_degrees(n, sol);
 
     for (int i = 0; i < vertices_degree.size(); i++) {
         if (vertices_degree[i] % 2) {
-            cout << "file = " << file_name << " com vertice " << i << " de grau impar!" << endl;
+            std::cout << "instancia com vertice " << i << " de grau impar!" << std::endl;
             exit(1);
         }
     }
 
     // check if terminals are connected
     if (!verify_terminals_connected(n, sol)) {
-        cout << "file = " << file_name << " com teminais desconectados!" << endl;
+        std::cout << "instancia com teminais desconectados!" << std::endl;
     }
 
 }
@@ -194,9 +194,7 @@ double get_sol_val(int n, T** sol, float** edges_weights) {
 
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-
             total_cost += sol[i][j] * edges_weights[i][j];
-
         }
     }
 

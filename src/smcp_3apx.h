@@ -11,7 +11,6 @@
 #include "src/surv_net_2apx.h"
 #include "src/utils.h"
 
-using namespace std;
 using namespace lemon;
 
 namespace ApxSMCP {
@@ -146,23 +145,27 @@ namespace ApxSMCP {
         return sol;
     }
 
-    int** solve(int n, float** edges_weights, int** sn_sol) {
+    int** solve(
+        int n,
+        float** edges_weights,
+        ListGraph* graph,
+        ListGraph::EdgeMap<float>* cost,
+        int** sn_sol
+    ) {
 
         for (int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 sn_sol[i][j] = 0;
 
-        ListGraph* graph = new ListGraph();
-        graph->reserveNode(n);
-        graph->reserveEdge((n * n) >> 1);
-
         SurvivableNetwork::init_graph(n, graph);
-        ListGraph::EdgeMap<float>* cost = new ListGraph::EdgeMap<float>(*graph);
+        
         SurvivableNetwork::init_cost_map(n, *graph, edges_weights, cost);
 
         SurvivableNetwork::solve(n, graph, cost, sn_sol);
 
-        vector<int> odd_degree_nodes;
+        std::vector<int> odd_degree_nodes;
+        odd_degree_nodes.reserve(n + 1);
+
         get_odd_degree_nodes(n, sn_sol, &odd_degree_nodes);
 
         if (odd_degree_nodes.size() > 0) {
@@ -173,10 +176,9 @@ namespace ApxSMCP {
                 filter.set(u, true);
             }
             FilterNodes<ListGraph> subgraph(*graph, filter);
-            cout << countNodes(subgraph) << endl;
+            // std::cout << countNodes(subgraph) << std::endl;
 
             FilterNodes<ListGraph>::EdgeMap<float>* inverted_cost = new FilterNodes<ListGraph>::EdgeMap<float>(subgraph);
-
 
             for (FilterNodes<ListGraph>::EdgeIt e(subgraph); e != INVALID; ++e) {
                 (*inverted_cost)[e] = -(*cost)[e];
@@ -207,9 +209,6 @@ namespace ApxSMCP {
         // print_matrix(n, sn_sol);
         sn_sol = short_cutting(n, sn_sol);
         // cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
-
-        delete cost;
-        delete graph;
 
         return sn_sol;
     }
