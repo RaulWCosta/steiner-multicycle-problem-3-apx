@@ -186,7 +186,7 @@ namespace SurvivableNetwork {
         for (int i = 0; i < n; i++) {
             graph->addNode();
         }
-        
+
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 ListGraph::Node u = graph->nodeFromId(i);
@@ -205,34 +205,43 @@ namespace SurvivableNetwork {
         }
     }
 
-    void init_cost_map(int n, ListGraph& graph, float** edges_weights, ListGraph::EdgeMap<float>* cost) {
+    void init_cost_map(int n, ListGraph* graph, float** edges_weights, ListGraph::EdgeMap<float>* cost) {
         
-        for (ListGraph::EdgeIt e(graph); e != INVALID; ++e) {
+        for (ListGraph::EdgeIt e(*graph); e != INVALID; ++e) {
 
-            int left = graph.id(graph.u(e));
-            int right = graph.id(graph.v(e));
+            int left = graph->id(graph->u(e));
+            int right = graph->id(graph->v(e));
 
             (*cost)[e] = edges_weights[left][right];
         }
 
     }
 
-    // solve 2-apx
-    void solve(int n, ListGraph* graph, ListGraph::EdgeMap<float>* cost, int** int_solution) {
+    // solve 2-apx survivable network
+    void solve(
+        int n,
+        ListGraph* graph,
+        ListGraph::EdgeMap<float>* cost,
+        float** edges_weights,
+        GRBVar* edge_vars,
+        ListGraph::EdgeMap<float>* lp_sol,
+        int** int_solution
+    ) {
 
         for (int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 int_solution[i][j] = 0;
 
+        init_graph(n, graph);
+        init_cost_map(n, graph, edges_weights, cost);
+
         bool flag_valid_solution = false;
 
         // cria modelo e adiciona restrições "base"
-        GRBVar* edge_vars = new GRBVar [ (n * n) >> 1 ];
         GRBModel* model = init_gurobi_model(n, edge_vars, *graph, *cost);
 
         // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
         //  is not connected to it's pair
-        ListGraph::EdgeMap<float>* lp_sol = new ListGraph::EdgeMap<float>(*graph);
 
         LPSolver lp_solver = LPSolver(n, model, edge_vars, graph);
 
@@ -249,8 +258,6 @@ namespace SurvivableNetwork {
 
         }
 
-        delete edge_vars;
-        delete lp_sol;
         delete model;
 
     }

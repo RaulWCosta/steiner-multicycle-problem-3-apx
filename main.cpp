@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <tuple>
 
 #include "src/utils.h"
 #include "src/smcp_3apx.h"
@@ -26,10 +27,10 @@ struct Result {
 struct ExecutionTracker {
     struct Instance instance;
     struct Result *linear_relaxation;
-    struct Result *approximation;
-    // struct Result survival_network;
-    // struct Result approximation_perfect_matching;
-    // struct Result approximation_shortcutting;
+    // struct Result *approximation;
+    struct Result *approximation_survival_network;
+    struct Result *approximation_perfect_matching;
+    struct Result *approximation_shortcutting;
 };
 
 Result execute_linear_relaxation(int n, float** edges_weights, double** double_sol) {
@@ -56,7 +57,7 @@ Result execute_linear_relaxation(int n, float** edges_weights, double** double_s
     auto end_time = std::chrono::high_resolution_clock::now();
     auto relaxed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-    double relaxed = get_sol_val(n, double_sol, edges_weights);
+    double relaxed = get_solution_value(n, double_sol, edges_weights);
 
     for (int i = 0; i < n; i++)
         delete[] edge_vars[i];
@@ -70,7 +71,7 @@ Result execute_linear_relaxation(int n, float** edges_weights, double** double_s
     return result;
 }
 
-Result execute_approximation(int n, float** edges_weights, int** int_sol) {
+std::tuple<Result, Result, Result> execute_approximation(int n, float** edges_weights, int** int_sol) {
 
     // allocate memory
     ListGraph* graph = new ListGraph();
@@ -78,25 +79,62 @@ Result execute_approximation(int n, float** edges_weights, int** int_sol) {
     graph->reserveEdge((n * n) >> 1);
     ListGraph::EdgeMap<float>* cost = new ListGraph::EdgeMap<float>(*graph);
 
+    GRBVar* edge_vars = new GRBVar [ (n * n) >> 1 ];
+    ListGraph::EdgeMap<float>* aux_lp_sol = new ListGraph::EdgeMap<float>(*graph);
+
+    list<int>* euclidean_path = new list<int>;
+    vector<int>* stack = new vector<int>;
+
+    // execute survivable network algorithm
     auto start_time = std::chrono::high_resolution_clock::now();
-    int_sol = ApxSMCP::solve(
+    SurvivableNetwork::solve(
+        n,
+        graph,
+        cost,
+        edges_weights,
+        edge_vars,
+        aux_lp_sol,
+        int_sol
+    );
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto execution_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+    double sn_val = get_solution_value(n, int_sol, edges_weights);
+    struct Result result_sn = { sn_val, (long long int)execution_time };
+
+    // execute perfect matching
+    start_time = std::chrono::high_resolution_clock::now();
+    ApxSMCP::solve_without_shortcutting(
         n,
         edges_weights,
         graph,
         cost,
-        int_sol
+        int_sol // assumes survivable network was executed prior
     );
-    auto end_time = std::chrono::high_resolution_clock::now();
-    auto apx_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+
+    end_time = std::chrono::high_resolution_clock::now();
+    execution_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+    double pm_val = get_solution_value(n, int_sol, edges_weights);
+    struct Result result_perf_match = { pm_val, (long long int)execution_time };
+    verify_solution(n, int_sol);
+
+    // execute short-cutting
+    start_time = std::chrono::high_resolution_clock::now();
+    ApxSMCP::short_cutting(n, euclidean_path, stack, int_sol);
+    end_time = std::chrono::high_resolution_clock::now();
+    execution_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+    double sc_val = get_solution_value(n, int_sol, edges_weights);
+    struct Result result_shortcutting = { sc_val, (long long int)execution_time };
 
     verify_solution(n, int_sol);
-    double apx = get_sol_val(n, int_sol, edges_weights);
 
     delete cost;
     delete graph;
+    delete edge_vars;
+    delete aux_lp_sol;
+    delete stack;
+    delete euclidean_path;
 
-    struct Result result = { apx, (long long int)apx_time };
-    return result;
+    return std::make_tuple(result_sn, result_perf_match, result_shortcutting);
 }
 
 void save_result_to_file(std::ofstream *result_file, ExecutionTracker tracker) {
@@ -104,10 +142,18 @@ void save_result_to_file(std::ofstream *result_file, ExecutionTracker tracker) {
     if (result_file->is_open()) {
         (*result_file) << tracker.instance.instance_file << ";";
         (*result_file) << tracker.instance.num_vertices << ";";
+
         (*result_file) << tracker.linear_relaxation->value << ";";
         (*result_file) << tracker.linear_relaxation->execution_time << ";";
-        (*result_file) << tracker.approximation->value << ";";
-        (*result_file) << tracker.approximation->execution_time;
+        
+        (*result_file) << tracker.approximation_survival_network->value << ";";
+        (*result_file) << tracker.approximation_survival_network->execution_time << ";";
+
+        (*result_file) << tracker.approximation_perfect_matching->value << ";";
+        (*result_file) << tracker.approximation_perfect_matching->execution_time << ";";
+
+        (*result_file) << tracker.approximation_shortcutting->value << ";";
+        (*result_file) << tracker.approximation_shortcutting->execution_time;
 
         (*result_file) << std::endl;
         result_file->flush();
@@ -142,7 +188,22 @@ int main(int argc, char* argv[]) {
     // save header to results file
     std::ofstream result_file("../../../_result2.csv", std::ios::app);
     if (result_file.is_open()) {
-        result_file << "instance;num_vertices;relaxed_val;relaxed_time;apx_val;apx_time" << endl;
+        result_file << "instance;";
+        result_file << "num_vertices;";
+
+        result_file << "relaxed_val;";
+        result_file << "relaxed_time;";
+        
+        result_file << "survive_net_val;";
+        result_file << "survive_net_time;";
+
+        result_file << "perfect_matching_val;";
+        result_file << "perfect_matching_time;";
+
+        result_file << "short_cutting_val;";
+        result_file << "short_cutting_time";
+
+        result_file << endl;
     } else {
         std::cerr << "Error: Unable to save result." << std::endl;
         exit(1);
@@ -163,7 +224,10 @@ int main(int argc, char* argv[]) {
 
         Result linear_relaxation_result = execute_linear_relaxation(n, edges_weights, double_sol);
 
-        Result approximate_result = execute_approximation(n, edges_weights, int_sol);
+        Result sn_result, perf_match_result, short_cutting_result;
+        std::tie(sn_result, perf_match_result, short_cutting_result) = execute_approximation(
+            n, edges_weights, int_sol
+        );
 
         struct ExecutionTracker tracker = {
             struct Instance {
@@ -171,7 +235,9 @@ int main(int argc, char* argv[]) {
                 n
             },
             &linear_relaxation_result,
-            &approximate_result
+            &sn_result,
+            &perf_match_result,
+            &short_cutting_result
         };
 
         save_result_to_file(&result_file, tracker);

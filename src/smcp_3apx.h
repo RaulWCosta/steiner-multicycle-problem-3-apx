@@ -101,17 +101,18 @@ namespace ApxSMCP {
 
     }
 
-    int** short_cutting(int n, int** sol) {
+    int** short_cutting(
+        int n,
+        list<int>* euclidean_path,
+        vector<int>* stack,
+        int** sol
+    ) {
 
         // get any initial vertex
         int curr_vert = 0;
 
-        list<int>* euclidean_path = new list<int>;
-
         vector<bool> visited(n, false);
         visited[curr_vert] = true;
-
-        vector<int>* stack = new vector<int>;
 
         // for each component
         while (curr_vert != -1) {
@@ -139,13 +140,10 @@ namespace ApxSMCP {
             }
         }
 
-        delete stack;
-        delete euclidean_path;
-
         return sol;
     }
 
-    int** solve(
+    int** solve_without_shortcutting(
         int n,
         float** edges_weights,
         ListGraph* graph,
@@ -153,15 +151,7 @@ namespace ApxSMCP {
         int** sn_sol
     ) {
 
-        for (int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                sn_sol[i][j] = 0;
-
-        SurvivableNetwork::init_graph(n, graph);
-        
-        SurvivableNetwork::init_cost_map(n, *graph, edges_weights, cost);
-
-        SurvivableNetwork::solve(n, graph, cost, sn_sol);
+        // assumes sn_sol contains survivable network solution
 
         std::vector<int> odd_degree_nodes;
         odd_degree_nodes.reserve(n + 1);
@@ -199,16 +189,7 @@ namespace ApxSMCP {
             }
 
             delete inverted_cost;
-
         }
-
-        // print_matrix(n, sn_sol);
-        // verify_solution("file", n, sn_sol);
-
-        // cout << "before shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
-        // print_matrix(n, sn_sol);
-        sn_sol = short_cutting(n, sn_sol);
-        // cout << "after shortcutting = " << get_sol_val(n, sn_sol, edges_weights) << endl;
 
         return sn_sol;
     }

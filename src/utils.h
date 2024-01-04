@@ -188,7 +188,7 @@ void verify_solution(int n, int** sol) {
 }
 
 template<typename T>
-double get_sol_val(int n, T** sol, float** edges_weights) {
+double get_solution_value(int n, T** sol, float** edges_weights) {
 
     double total_cost = 0.0;
 
