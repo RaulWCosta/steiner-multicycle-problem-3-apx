@@ -9,7 +9,9 @@
 #include "src/smcp_3apx.h"
 #include "src/linear_solution.h"
 
-int MAX_INSTANCE_SIZE = 300;
+#define DEBUG_FILE 0
+
+int MAX_INSTANCE_SIZE = 600;
 
 struct Instance {
     string instance_file;
@@ -119,7 +121,12 @@ int main(int argc, char* argv[]) {
 
     vector<string>* files = new vector<string>;
     string dir = "../../../testInst";
+#if DEBUG_FILE
+    files->push_back("../../../testInst/rg-256-q-1x1.0001.ccpdp");
+    std::cout << "my directory is " << argv[0] << std::endl;
+#else
     findDataFiles(dir, files);
+#endif
 
     // allocate memory to solution
     double** double_sol = new double* [MAX_INSTANCE_SIZE];
@@ -143,14 +150,11 @@ int main(int argc, char* argv[]) {
 
     for (string& file : *files) {
 
-        char* str = "../../../testInst/rg-256-q-1x1.0001.ccpdp";
-        string new_file = str;
-
         std::cout << "executing file " << file << std::endl;
         int n = 0;
         vector<pair<float, float>> vertices;
 
-        read_instance(new_file, &n, &vertices);
+        read_instance(file, &n, &vertices);
 
         // init edges_weights matrix
         for (int i = 0; i < n; i++)
