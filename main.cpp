@@ -119,7 +119,7 @@ std::tuple<Result, Result, Result> execute_approximation(int n, float** edges_we
 
     // execute short-cutting
     start_time = std::chrono::high_resolution_clock::now();
-    ApxSMCP::short_cutting(n, euclidean_path, stack, int_sol);
+    ApxSMCP::short_cutting(n, edges_weights, euclidean_path, stack, int_sol);
     end_time = std::chrono::high_resolution_clock::now();
     execution_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
     double sc_val = get_solution_value(n, int_sol, edges_weights);

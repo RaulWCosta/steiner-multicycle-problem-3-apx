@@ -27,18 +27,41 @@ namespace ApxSMCP {
 
     }
 
-    void calculate_sol_euclidean_path(int n, int init_vert, int** sol, vector<int>* stack, list<int>* euclidean_path) {
+    void calculate_sol_euclidean_path(int n, int init_vert, float** edges_weights, int** sol, vector<int>* neighboors, list<int>* euclidean_path) {
 
-        stack->push_back(init_vert);
-        while (stack->size()) {
-            int curr_vert = (*stack)[stack->size() - 1];
-            stack->pop_back();
+        neighboors->push_back(init_vert);
+        while (neighboors->size()) {
+            
+            if (euclidean_path->size()) {
+                // move closest vertex to last vertex on euclidean_path to the end of the neighboors vector
+                //  this is done to improvement the performance of the short-cutting
+                float best_val = std::numeric_limits<float>::max();
+                int best_idx;
+
+                int last_vertex = euclidean_path->back();
+                for (int i = 0; i < neighboors->size(); i++) {
+                    if (edges_weights[last_vertex][(*neighboors)[i]] < best_val) {
+                        best_val = edges_weights[last_vertex][(*neighboors)[i]];
+                        best_idx = i;
+                    }
+                }
+
+                // put closest at the end
+                int aux;
+                aux = (*neighboors)[neighboors->size() - 1];
+                (*neighboors)[neighboors->size() - 1] = (*neighboors)[best_idx];
+                (*neighboors)[best_idx] = aux;
+
+            }
+
+            int curr_vert = (*neighboors)[neighboors->size() - 1];
+            neighboors->pop_back();
 
             for (int i = 0; i < n; i++) {
                 if (i == curr_vert)
                     continue;
                 if (sol[curr_vert][i]) {
-                    stack->push_back(i);
+                    neighboors->push_back(i);
                     sol[curr_vert][i]--;
                     sol[i][curr_vert]--;
                 }
@@ -96,6 +119,7 @@ namespace ApxSMCP {
 
     int** short_cutting(
         int n,
+        float** edges_weights,
         list<int>* euclidean_path,
         vector<int>* stack,
         int** sol
@@ -113,7 +137,7 @@ namespace ApxSMCP {
             stack->clear();
             euclidean_path->clear();
 
-            calculate_sol_euclidean_path(n, curr_vert, sol, stack, euclidean_path);
+            calculate_sol_euclidean_path(n, curr_vert, edges_weights, sol, stack, euclidean_path);
 
             shortcut_euclidian_path(n, curr_vert, euclidean_path);
 
