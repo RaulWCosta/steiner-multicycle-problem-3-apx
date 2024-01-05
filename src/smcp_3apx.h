@@ -34,20 +34,15 @@ namespace ApxSMCP {
             int curr_vert = (*stack)[stack->size() - 1];
             stack->pop_back();
 
-            // bool added_neighboor = false;
             for (int i = 0; i < n; i++) {
                 if (i == curr_vert)
                     continue;
                 if (sol[curr_vert][i]) {
-                    // added_neighboor = true;
                     stack->push_back(i);
                     sol[curr_vert][i]--;
                     sol[i][curr_vert]--;
                 }
             }
-            // if (!added_neighboor) {
-            //     break;
-            // }
 
             euclidean_path->push_back(curr_vert);
         }
@@ -85,14 +80,12 @@ namespace ApxSMCP {
 
         vector<list<int>::iterator> to_remove_entries;
 
-        int count = 0;
         for (; it != end_it; ++it) {
             int i = *it;
             if (visited_in_path[i]) {
                 to_remove_entries.push_back(it);
             }
             visited_in_path[i] = true;
-            count++;
         }
 
         for (auto it = to_remove_entries.rbegin(); it != to_remove_entries.rend(); ++it) {
