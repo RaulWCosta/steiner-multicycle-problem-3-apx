@@ -34,7 +34,7 @@ namespace SurvivableNetwork {
         }
 
 
-        void solve(ListGraph::EdgeMap<float>* cap) {
+        void solve(ListGraph::EdgeMap<float>* cap, long long int *gomory_hu_total_execution_time) {
 
             bool valid_relaxed_solution = false;
 
@@ -44,8 +44,12 @@ namespace SurvivableNetwork {
                 // update cap inplace
                 lp_solver_run(cap);
 
+                auto start_time = std::chrono::high_resolution_clock::now();
                 GomoryHu<ListGraph, ListGraph::EdgeMap<float>> ght(*_graph, *cap);
                 ght.run();
+                auto end_time = std::chrono::high_resolution_clock::now();
+                (*gomory_hu_total_execution_time) += (long long int) std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+
                 int half_n = _n >> 1;
                 for (int source = 0; source < half_n; source++) {
                     int sink = source + half_n;
@@ -218,7 +222,7 @@ namespace SurvivableNetwork {
     }
 
     // solve 2-apx survivable network
-    void solve(
+    Result solve(
         int n,
         ListGraph* graph,
         ListGraph::EdgeMap<float>* cost,
@@ -240,16 +244,14 @@ namespace SurvivableNetwork {
         // cria modelo e adiciona restrições "base"
         GRBModel* model = init_gurobi_model(n, edge_vars, *graph, *cost);
 
-        // vector with vertices within an invalid cycle, i.e. there is some vertex in the cycle which
-        //  is not connected to it's pair
-
+        long long int gomory_hu_total_execution_time = 0;
         LPSolver lp_solver = LPSolver(n, model, edge_vars, graph);
 
         // // enquanto modelo nao retorna solucao viavel
         while(!flag_valid_solution) {
 
             // rodar LP até solução viável do relaxado
-            lp_solver.solve(lp_sol);
+            lp_solver.solve(lp_sol, &gomory_hu_total_execution_time);
 
             // adiciona valores >= 0.5 no int_solution
             round_up_relaxed_solution(n, *graph, *lp_sol, edge_vars, *model, int_solution);
@@ -260,6 +262,8 @@ namespace SurvivableNetwork {
 
         delete model;
 
+        struct Result result_gomory_hu = { 0.0f, gomory_hu_total_execution_time };
+        return result_gomory_hu;
     }
 
 }

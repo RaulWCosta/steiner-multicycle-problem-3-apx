@@ -106,6 +106,9 @@ if __name__ == "__main__":
     data_path = "..\_result.csv"
     df_raw = pd.read_csv(data_path, delimiter=";")
 
+    df_raw["apx_val"] = df_raw["short_cutting_val"]
+    df_raw["apx_time"] = df_raw["survive_net_time"] + df_raw["perfect_matching_time"]+ df_raw["short_cutting_time"]
+
     generate_latex_table_from_raw_data(df_raw)
 
     # Call the function to plot the data

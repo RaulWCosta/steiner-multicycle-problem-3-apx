@@ -14,21 +14,14 @@
 
 int MAX_INSTANCE_SIZE = 600;
 
-struct Instance {
-    string instance_file;
-    int num_vertices;
-};
-
-struct Result {
-    double value;
-    long long int execution_time;
-};
 
 struct ExecutionTracker {
     struct Instance instance;
     struct Result *linear_relaxation;
     // struct Result *approximation;
     struct Result *approximation_survival_network;
+    struct Result *result_gomory_hu;
+
     struct Result *approximation_perfect_matching;
     struct Result *approximation_shortcutting;
 };
@@ -71,7 +64,7 @@ Result execute_linear_relaxation(int n, float** edges_weights, double** double_s
     return result;
 }
 
-std::tuple<Result, Result, Result> execute_approximation(int n, float** edges_weights, int** int_sol) {
+std::tuple<Result, Result, Result, Result> execute_approximation(int n, float** edges_weights, int** int_sol) {
 
     // allocate memory
     ListGraph* graph = new ListGraph();
@@ -87,7 +80,7 @@ std::tuple<Result, Result, Result> execute_approximation(int n, float** edges_we
 
     // execute survivable network algorithm
     auto start_time = std::chrono::high_resolution_clock::now();
-    SurvivableNetwork::solve(
+    struct Result result_gomory_hu = SurvivableNetwork::solve(
         n,
         graph,
         cost,
@@ -134,7 +127,7 @@ std::tuple<Result, Result, Result> execute_approximation(int n, float** edges_we
     delete stack;
     delete euclidean_path;
 
-    return std::make_tuple(result_sn, result_perf_match, result_shortcutting);
+    return std::make_tuple(result_sn, result_gomory_hu, result_perf_match, result_shortcutting);
 }
 
 void save_result_to_file(std::ofstream *result_file, ExecutionTracker tracker) {
@@ -148,6 +141,9 @@ void save_result_to_file(std::ofstream *result_file, ExecutionTracker tracker) {
         
         (*result_file) << tracker.approximation_survival_network->value << ";";
         (*result_file) << tracker.approximation_survival_network->execution_time << ";";
+
+        (*result_file) << tracker.result_gomory_hu->value << ";";
+        (*result_file) << tracker.result_gomory_hu->execution_time << ";";
 
         (*result_file) << tracker.approximation_perfect_matching->value << ";";
         (*result_file) << tracker.approximation_perfect_matching->execution_time << ";";
@@ -197,6 +193,9 @@ int main(int argc, char* argv[]) {
         result_file << "survive_net_val;";
         result_file << "survive_net_time;";
 
+        result_file << "gomory_hu_val;";
+        result_file << "gomory_hu_time;";
+
         result_file << "perfect_matching_val;";
         result_file << "perfect_matching_time;";
 
@@ -224,8 +223,8 @@ int main(int argc, char* argv[]) {
 
         Result linear_relaxation_result = execute_linear_relaxation(n, edges_weights, double_sol);
 
-        Result sn_result, perf_match_result, short_cutting_result;
-        std::tie(sn_result, perf_match_result, short_cutting_result) = execute_approximation(
+        Result sn_result, result_gomory_hu, perf_match_result, short_cutting_result;
+        std::tie(sn_result, result_gomory_hu, perf_match_result, short_cutting_result) = execute_approximation(
             n, edges_weights, int_sol
         );
 
@@ -236,6 +235,7 @@ int main(int argc, char* argv[]) {
             },
             &linear_relaxation_result,
             &sn_result,
+            &result_gomory_hu,
             &perf_match_result,
             &short_cutting_result
         };

@@ -200,3 +200,13 @@ double get_solution_value(int n, T** sol, float** edges_weights) {
 
     return total_cost;
 }
+
+struct Instance {
+    string instance_file;
+    int num_vertices;
+};
+
+struct Result {
+    double value;
+    long long int execution_time;
+};
