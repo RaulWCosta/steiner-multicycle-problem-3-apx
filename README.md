@@ -10,4 +10,4 @@ cmake .
 
 This project requires the Gurobi Optimizer library to be executed. Please, refer to the [Gurobi installation guide](https://www.gurobi.com/downloads/gurobi-software/) for more information.
 
-This program is part of my master's dissertation project. You can see the full text of the dissertation in:
+This program is part of my master's dissertation project. You can see the full dissertation in:
